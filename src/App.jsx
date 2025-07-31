@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import style from './App.module.scss';
 import table00 from './tables/table-00.json';
 
@@ -9,18 +10,25 @@ const colorMap = {
   white: { hex: '#fff', explanation: '不可刷字符' },
 };
 
-function ColorLegend() {
+function Panel({ showColors, setShowColors, showLbf, setShowLbf }) {
   return (
-    <div className={style['color-legend']}>
-      {Object.entries(colorMap).map(([colorName, colorInfo]) => (
-        <div key={colorName} className={style['legend-item']}>
-          <div
-            className={style['color-box']}
-            style={{ backgroundColor: colorInfo.hex }}
-          ></div>
-          <span>{colorInfo.explanation}</span>
-        </div>
-      ))}
+    <div className={style['panel']}>
+      <label className={style['checkbox-label']}>
+        <input
+          type="checkbox"
+          checked={showColors}
+          onChange={(e) => setShowColors(e.target.checked)}
+        />
+        显示字符种类标注
+      </label>
+      <label className={style['checkbox-label']}>
+        <input
+          type="checkbox"
+          checked={showLbf}
+          onChange={(e) => setShowLbf(e.target.checked)}
+        />
+        显示字符转换器步骤
+      </label>
     </div>
   );
 }
@@ -38,7 +46,7 @@ function TableHeader() {
   );
 }
 
-function TableRow({ row, rowIndex }) {
+function TableRow({ row, rowIndex, showColors, showLbf }) {
   return (
     <tr key={rowIndex}>
       <th>{rowIndex.toString(16).toUpperCase()}</th>
@@ -48,47 +56,75 @@ function TableRow({ row, rowIndex }) {
           cell={cell}
           rowIndex={rowIndex}
           colIndex={cellIndex}
+          showColors={showColors}
+          showLbf={showLbf}
         />
       ))}
     </tr>
   );
 }
 
-function TableCell({ cell, rowIndex, colIndex }) {
-  const cellColor = colorMap[cell.color]?.hex || '#fff';
+function TableCell({ cell, showColors, showLbf }) {
+  const cellColor = showColors ? (colorMap[cell.color]?.hex || '#fff') : '#fff';
 
   return (
     <td style={{ backgroundColor: cellColor }}>
       <div className={style['content-wrapper']}>
-        <div
-          className={style['td-text']}
-          style={{
-            fontFamily: cell.disableFont ? 'Arial, sans-serif' : 'fx991cnx',
-          }}
-        >
+        <div className={`${style['td-text']} ${cell.Arial ? style.Arial : ''}`}>
           {cell.text}
         </div>
-        {cell.lbf && <div className={style.lbf}>{cell.lbf}</div>}
+        {showLbf && cell.lbf && <div className={style.lbf}>{cell.lbf}</div>}
       </div>
     </td>
   );
 }
 
+function ColorLegend() {
+  return (
+    <div className={style['color-legend']}>
+      {Object.entries(colorMap).map(([colorName, colorInfo]) => (
+        <div key={colorName} className={style['legend-item']}>
+          <div
+            className={style['color-box']}
+            style={{ backgroundColor: colorInfo.hex }}
+          ></div>
+          <span>{colorInfo.explanation}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function App() {
+  const [showColors, setShowColors] = useState(true);
+  const [showLbf, setShowLbf] = useState(true);
+
   return (
     <div className={style.container}>
       <h1>fx991CNX 实用全标注字符表</h1>
+      <Panel
+        showColors={showColors}
+        setShowColors={setShowColors}
+        showLbf={showLbf}
+        setShowLbf={setShowLbf}
+      />
       <div className={style['table-container']}>
         <table className={style.table}>
           <TableHeader />
           <tbody>
             {table00.map((row, rowIndex) => (
-              <TableRow key={rowIndex} row={row} rowIndex={rowIndex} />
+              <TableRow
+                key={rowIndex}
+                row={row.map(cell => ({ ...cell, showColors, showLbf }))}
+                rowIndex={rowIndex}
+                showColors={showColors}
+                showLbf={showLbf}
+              />
             ))}
           </tbody>
         </table>
       </div>
-      <ColorLegend />
+      {showColors && <ColorLegend />}
     </div>
   );
 }
