@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import style from './App.module.scss';
-import table00 from './tables/table-00.json';
+
+const tableManifest = [
+  { file: './tables/table-00.json', name: '字符表' },
+  { file: './tables/table-00-display.json', name: '拼字字符表' },
+];
+
+const tableModules = import.meta.glob('./tables/*.json');
 
 const colorMap = {
   green: { hex: '#d3f9d8', explanation: '可直接打出' },
@@ -10,25 +16,46 @@ const colorMap = {
   white: { hex: '#fff', explanation: '不可刷字符' },
 };
 
-function Panel({ showColors, setShowColors, showLbf, setShowLbf }) {
+function Checkbox({ checked, onChange, children }) {
+  return (
+    <label className={style['checkbox-label']}>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      {children}
+    </label>
+  );
+}
+
+function Panel({ showColors, setShowColors, showLbf, setShowLbf, availableTables, selectedTable, setSelectedTable }) {
   return (
     <div className={style['panel']}>
-      <label className={style['checkbox-label']}>
-        <input
-          type="checkbox"
-          checked={showColors}
-          onChange={(e) => setShowColors(e.target.checked)}
-        />
+      <Checkbox
+        checked={showColors}
+        onChange={(checked) => setShowColors(checked)}
+      >
         显示字符种类标注
-      </label>
-      <label className={style['checkbox-label']}>
-        <input
-          type="checkbox"
-          checked={showLbf}
-          onChange={(e) => setShowLbf(e.target.checked)}
-        />
+      </Checkbox>
+
+      <Checkbox checked={showLbf} onChange={(checked) => setShowLbf(checked)}>
         显示字符转换器步骤
-      </label>
+      </Checkbox>
+
+      <div className={style['select-container']}>
+        <select
+          value={selectedTable}
+          onChange={(e) => setSelectedTable(e.target.value)}
+          className={style.select}
+        >
+          {availableTables.map(table => (
+            <option key={table.file} value={table.file}>
+              {table.name}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }
@@ -65,7 +92,7 @@ function TableRow({ row, rowIndex, showColors, showLbf }) {
 }
 
 function TableCell({ cell, showColors, showLbf }) {
-  const cellColor = showColors ? (colorMap[cell.color]?.hex || '#fff') : '#fff';
+  const cellColor = showColors ? colorMap[cell.color]?.hex || '#fff' : '#fff';
 
   return (
     <td style={{ backgroundColor: cellColor }}>
@@ -98,6 +125,24 @@ function ColorLegend() {
 export default function App() {
   const [showColors, setShowColors] = useState(true);
   const [showLbf, setShowLbf] = useState(true);
+  const [availableTables, setAvailableTables] = useState([]);
+  const [selectedTable, setSelectedTable] = useState('');
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    setAvailableTables(tableManifest);
+    if (tableManifest.length > 0) {
+      setSelectedTable(tableManifest[0].file);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedTable && tableModules[selectedTable]) {
+      tableModules[selectedTable]().then(module => {
+        setTableData(module.default);
+      });
+    }
+  }, [selectedTable]);
 
   return (
     <div className={style.container}>
@@ -107,15 +152,18 @@ export default function App() {
         setShowColors={setShowColors}
         showLbf={showLbf}
         setShowLbf={setShowLbf}
+        availableTables={availableTables}
+        selectedTable={selectedTable}
+        setSelectedTable={setSelectedTable}
       />
       <div className={style['table-container']}>
         <table className={style.table}>
           <TableHeader />
           <tbody>
-            {table00.map((row, rowIndex) => (
+            {tableData.map((row, rowIndex) => (
               <TableRow
                 key={rowIndex}
-                row={row.map(cell => ({ ...cell, showColors, showLbf }))}
+                row={row.map((cell) => ({ ...cell, showColors, showLbf }))}
                 rowIndex={rowIndex}
                 showColors={showColors}
                 showLbf={showLbf}

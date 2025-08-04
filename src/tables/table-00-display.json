@@ -1,0 +1,1020 @@
+[
+  [
+    {
+      "text": ""
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "811"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "812"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "813"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "814"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "815"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "816"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "817"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "818"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "819"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "81A"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "821"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "822"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "831"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "832"
+    },
+    {
+      "text": "",
+      "color": "yellow",
+      "lbf": "833"
+    }
+  ],
+  [
+    {
+      "text": "𝒙",
+      "color": "yellow",
+      "lbf": "834"
+    },
+    {
+      "text": "𝒚",
+      "color": "yellow",
+      "lbf": "81B"
+    },
+    {
+      "text": "𝒛",
+      "color": "yellow",
+      "lbf": "81C"
+    },
+    {
+      "text": "…",
+      "color": "yellow",
+      "lbf": "8▼12"
+    },
+    {
+      "text": "▲",
+      "color": "yellow",
+      "lbf": "8▼11"
+    },
+    {
+      "text": "▼",
+      "color": "yellow",
+      "lbf": "841"
+    },
+    {
+      "text": "▸",
+      "color": "yellow",
+      "lbf": "842"
+    },
+    {
+      "text": "₋",
+      "color": "yellow",
+      "lbf": "843"
+    },
+    {
+      "text": "$",
+      "color": "yellow",
+      "lbf": "844"
+    },
+    {
+      "text": "◁",
+      "color": "yellow",
+      "lbf": "8▼21"
+    },
+    {
+      "text": "&",
+      "color": "yellow",
+      "lbf": "8▼22"
+    },
+    {
+      "text": "𝑡",
+      "color": "yellow",
+      "lbf": "8▼23"
+    },
+    {
+      "text": "ᴛ",
+      "color": "yellow",
+      "lbf": "8▼24"
+    },
+    {
+      "text": "ₜ",
+      "color": "yellow",
+      "lbf": "8▼41"
+    },
+    {
+      "text": "ₕ",
+      "color": "yellow",
+      "lbf": "8▼42"
+    },
+    {
+      "text": "₅",
+      "color": "yellow",
+      "lbf": "8▼25"
+    }
+  ],
+  [
+    {
+      "text": "",
+      "color": "blue",
+      "lbf": "8▼26"
+    },
+    {
+      "text": "!",
+      "color": "green"
+    },
+    {
+      "text": "\"",
+      "color": "green"
+    },
+    {
+      "text": "#",
+      "color": "green"
+    },
+    {
+      "text": "×",
+      "color": "yellow",
+      "lbf": "8▼28"
+    },
+    {
+      "text": "%",
+      "color": "yellow",
+      "lbf": "8▲12"
+    },
+    {
+      "text": "÷",
+      "color": "yellow",
+      "lbf": "8▲11"
+    },
+    {
+      "text": "'",
+      "color": "yellow",
+      "lbf": "8▼34"
+    },
+    {
+      "text": "(",
+      "color": "yellow",
+      "lbf": "8▼33"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": "⋅"
+    },
+    {
+      "text": "+"
+    },
+    {
+      "text": ",",
+      "color": "green"
+    },
+    {
+      "text": "-",
+      "color": "green"
+    },
+    {
+      "text": ".",
+      "color": "green"
+    },
+    {
+      "text": "/"
+    }
+  ],
+  [
+    {
+      "text": "0",
+      "color": "green"
+    },
+    {
+      "text": "1",
+      "color": "green"
+    },
+    {
+      "text": "2",
+      "color": "green"
+    },
+    {
+      "text": "3",
+      "color": "green"
+    },
+    {
+      "text": "4",
+      "color": "green"
+    },
+    {
+      "text": "5",
+      "color": "green"
+    },
+    {
+      "text": "6",
+      "color": "green"
+    },
+    {
+      "text": "7",
+      "color": "green"
+    },
+    {
+      "text": "8",
+      "color": "green"
+    },
+    {
+      "text": "9",
+      "color": "green"
+    },
+    {
+      "text": ":",
+      "color": "yellow",
+      "lbf": "737"
+    },
+    {
+      "text": ";",
+      "color": "yellow",
+      "lbf": "738"
+    },
+    {
+      "text": "<",
+      "color": "yellow",
+      "lbf": "739"
+    },
+    {
+      "text": "=",
+      "color": "yellow",
+      "lbf": "73A"
+    },
+    {
+      "text": ">",
+      "color": "yellow",
+      "lbf": "73B"
+    },
+    {
+      "text": "?",
+      "color": "yellow",
+      "lbf": "73C"
+    }
+  ],
+  [
+    {
+      "text": "@",
+      "color": "green"
+    },
+    {
+      "text": "A",
+      "color": "green"
+    },
+    {
+      "text": "B",
+      "color": "green"
+    },
+    {
+      "text": "C",
+      "color": "green"
+    },
+    {
+      "text": "D",
+      "color": "green"
+    },
+    {
+      "text": "E",
+      "color": "green"
+    },
+    {
+      "text": "F",
+      "color": "green"
+    },
+    {
+      "text": "G",
+      "color": "green"
+    },
+    {
+      "text": "H",
+      "color": "green"
+    },
+    {
+      "text": "I",
+      "color": "green"
+    },
+    {
+      "text": "J",
+      "color": "yellow",
+      "lbf": "746"
+    },
+    {
+      "text": "K",
+      "color": "yellow",
+      "lbf": "713"
+    },
+    {
+      "text": "L",
+      "color": "yellow",
+      "lbf": "747"
+    },
+    {
+      "text": "M",
+      "color": "yellow",
+      "lbf": "748"
+    },
+    {
+      "text": "N",
+      "color": "yellow",
+      "lbf": "749"
+    },
+    {
+      "text": "O",
+      "color": "yellow",
+      "lbf": "714"
+    }
+  ],
+  [
+    {
+      "text": "P",
+      "color": "violet",
+      "lbf": "715"
+    },
+    {
+      "text": "Q",
+      "color": "violet",
+      "lbf": "724"
+    },
+    {
+      "text": "R",
+      "color": "violet",
+      "lbf": "7▼11"
+    },
+    {
+      "text": "S",
+      "color": "yellow",
+      "lbf": "725"
+    },
+    {
+      "text": "T",
+      "color": "yellow",
+      "lbf": "716"
+    },
+    {
+      "text": "U",
+      "color": "yellow",
+      "lbf": "7▼21"
+    },
+    {
+      "text": "V",
+      "color": "yellow",
+      "lbf": "717"
+    },
+    {
+      "text": "W",
+      "color": "yellow",
+      "lbf": "7▼12"
+    },
+    {
+      "text": "X",
+      "color": "yellow",
+      "lbf": "718"
+    },
+    {
+      "text": "Y",
+      "color": "yellow",
+      "lbf": "719"
+    },
+    {
+      "text": "Z",
+      "color": "yellow",
+      "lbf": "726"
+    },
+    {
+      "text": "[",
+      "color": "yellow",
+      "lbf": "727"
+    },
+    {
+      "text": "▫",
+      "color": "yellow",
+      "lbf": "73X"
+    },
+    {
+      "text": "]",
+      "color": "yellow",
+      "lbf": "7▼13"
+    },
+    {
+      "text": "^",
+      "color": "yellow",
+      "lbf": "7▼14"
+    },
+    {
+      "text": "_"
+    }
+  ],
+  [
+    {
+      "text": "−",
+      "color": "green"
+    },
+    {
+      "text": "a"
+    },
+    {
+      "text": "b"
+    },
+    {
+      "text": "c"
+    },
+    {
+      "text": "d"
+    },
+    {
+      "text": "e"
+    },
+    {
+      "text": "f",
+      "color": "blue"
+    },
+    {
+      "text": "g",
+      "color": "blue"
+    },
+    {
+      "text": "h",
+      "color": "green"
+    },
+    {
+      "text": "i",
+      "color": "green"
+    },
+    {
+      "text": "j"
+    },
+    {
+      "text": "k"
+    },
+    {
+      "text": "l",
+      "color": "green"
+    },
+    {
+      "text": "m",
+      "color": "green"
+    },
+    {
+      "text": "n",
+      "color": "green"
+    },
+    {
+      "text": "o",
+      "color": "green"
+    }
+  ],
+  [
+    {
+      "text": "p",
+      "color": "green"
+    },
+    {
+      "text": "q",
+      "color": "green"
+    },
+    {
+      "text": "r",
+      "color": "green"
+    },
+    {
+      "text": "s",
+      "color": "green"
+    },
+    {
+      "text": "t",
+      "color": "green"
+    },
+    {
+      "text": "u",
+      "color": "green"
+    },
+    {
+      "text": "v",
+      "color": "green"
+    },
+    {
+      "text": "w",
+      "color": "green"
+    },
+    {
+      "text": "x",
+      "color": "green"
+    },
+    {
+      "text": "y",
+      "color": "green"
+    },
+    {
+      "text": "z",
+      "color": "green"
+    },
+    {
+      "text": "{",
+      "color": "green"
+    },
+    {
+      "text": "|",
+      "color": "green"
+    },
+    {
+      "text": "}",
+      "color": "green"
+    },
+    {
+      "text": "~",
+      "color": "violet"
+    },
+    {
+      "text": "├",
+      "color": "violet"
+    }
+  ],
+  [
+    {
+      "text": "𝒊"
+    },
+    {
+      "text": "𝒆"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "°"
+    },
+    {
+      "text": "ʳ"
+    },
+    {
+      "text": "ᵍ",
+      "color": "green"
+    },
+    {
+      "text": "∠"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "→"
+    },
+    {
+      "text": "∏"
+    },
+    {
+      "text": "⇒",
+      "color": "blue"
+    }
+  ],
+  [
+    {
+      "text": "",
+      "color": "blue"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "⌟"
+    },
+    {
+      "text": "≤"
+    },
+    {
+      "text": "≠"
+    },
+    {
+      "text": "≥"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "√"
+    },
+    {
+      "text": "∫"
+    },
+    {
+      "text": "ᴀ"
+    },
+    {
+      "text": "ʙ"
+    },
+    {
+      "text": "ᴄ"
+    },
+    {
+      "text": "ₙ"
+    },
+    {
+      "text": "▶"
+    },
+    {
+      "text": "◀"
+    }
+  ],
+  [
+    {
+      "text": "⁰"
+    },
+    {
+      "text": "¹"
+    },
+    {
+      "text": "²"
+    },
+    {
+      "text": "³"
+    },
+    {
+      "text": "⁴"
+    },
+    {
+      "text": "⁵",
+      "color": "green"
+    },
+    {
+      "text": "⁶",
+      "color": "green"
+    },
+    {
+      "text": "⁷",
+      "color": "green"
+    },
+    {
+      "text": "⁸",
+      "color": "green"
+    },
+    {
+      "text": "⁹",
+      "color": "green"
+    },
+    {
+      "text": "",
+      "color": "violet"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "",
+      "color": "blue"
+    },
+    {
+      "text": "₍",
+      "color": "green"
+    },
+    {
+      "text": "₎",
+      "color": "green"
+    },
+    {
+      "text": ""
+    }
+  ],
+  [
+    {
+      "text": "₀"
+    },
+    {
+      "text": "₁"
+    },
+    {
+      "text": "₂"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "ꜰ"
+    },
+    {
+      "text": "ɴ"
+    },
+    {
+      "text": "ᴘ"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "𝗔"
+    },
+    {
+      "text": "𝗕"
+    },
+    {
+      "text": "𝗖"
+    },
+    {
+      "text": "𝗗"
+    },
+    {
+      "text": "𝗘"
+    },
+    {
+      "text": "𝗙"
+    },
+    {
+      "text": "𝗣"
+    },
+    {
+      "text": "▷"
+    }
+  ],
+  [
+    {
+      "text": "∑",
+      "color": "green"
+    },
+    {
+      "text": "𝛼"
+    },
+    {
+      "text": "𝛾"
+    },
+    {
+      "text": "𝜀"
+    },
+    {
+      "text": "𝜃"
+    },
+    {
+      "text": "𝜆"
+    },
+    {
+      "text": "𝜇"
+    },
+    {
+      "text": "𝜋"
+    },
+    {
+      "text": "𝜎",
+      "color": "green"
+    },
+    {
+      "text": "𝜙",
+      "color": "green"
+    },
+    {
+      "text": "ℓ",
+      "color": "green"
+    },
+    {
+      "text": "ℏ"
+    },
+    {
+      "text": "▮"
+    },
+    {
+      "text": "▯"
+    },
+    {
+      "text": "₃"
+    },
+    {
+      "text": "＿"
+    }
+  ],
+  [
+    {
+      "text": "𝐟",
+      "color": "green"
+    },
+    {
+      "text": "𝐩"
+    },
+    {
+      "text": "𝐧",
+      "color": "blue"
+    },
+    {
+      "text": "𝝁",
+      "color": "blue"
+    },
+    {
+      "text": "𝐦",
+      "color": "green"
+    },
+    {
+      "text": "𝐤",
+      "color": "green"
+    },
+    {
+      "text": "𝐌",
+      "color": "green"
+    },
+    {
+      "text": "𝐆",
+      "color": "violet"
+    },
+    {
+      "text": "𝐓",
+      "color": "green"
+    },
+    {
+      "text": "𝐏",
+      "color": "green"
+    },
+    {
+      "text": "𝐄",
+      "color": "green"
+    },
+    {
+      "text": "𝐹",
+      "color": "green"
+    },
+    {
+      "text": "ₚ",
+      "color": "green"
+    },
+    {
+      "text": "ₑ",
+      "color": "green"
+    },
+    {
+      "text": "ᴊ",
+      "color": "green"
+    },
+    {
+      "text": "ᴋ",
+      "color": "green"
+    }
+  ],
+  [
+    {
+      "text": "",
+      "color": "green"
+    },
+    {
+      "text": "",
+      "color": "green"
+    },
+    {
+      "text": "₉",
+      "color": "green"
+    },
+    {
+      "text": "Å",
+      "color": "green"
+    },
+    {
+      "text": "ₘ",
+      "color": "green"
+    },
+    {
+      "text": "ɪ",
+      "color": "green"
+    },
+    {
+      "text": "₄",
+      "color": "green"
+    },
+    {
+      "text": "",
+      "color": "green"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    }
+  ],
+  [
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    }
+  ]
+]
