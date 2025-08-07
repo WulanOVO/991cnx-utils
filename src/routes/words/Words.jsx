@@ -40,6 +40,24 @@ function Panel({ searchTerm, setSearchTerm, sortByAddress, setSortByAddress }) {
 }
 
 function TableRow({ address, content, searchTerm, selectedChar, onCharClick }) {
+  const [needSpans, setNeedSpans] = useState(false);
+
+  useEffect(() => {
+    setNeedSpans(searchTerm !== '');
+  }, [searchTerm]);
+
+  const handleMouseEnter = () => {
+    if (searchTerm === '') {
+      setNeedSpans(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (searchTerm === '') {
+      setNeedSpans(false);
+    }
+  };
+
   return (
     <tr>
       <td>
@@ -53,32 +71,38 @@ function TableRow({ address, content, searchTerm, selectedChar, onCharClick }) {
         </div>
       </td>
 
-      <td>
-        {[...content].map((char, charIndex) => {
-          const isSelected =
-            selectedChar &&
-            selectedChar.wordAddress === address &&
-            selectedChar.charIndex === charIndex;
+      <td onMouseLeave={handleMouseLeave}>
+        {needSpans ? (
+          [...content].map((char, charIndex) => {
+            const isSelected =
+              selectedChar &&
+              selectedChar.wordAddress === address &&
+              selectedChar.charIndex === charIndex;
 
-          let charContent = char;
-          if (
-            !isSelected &&
-            searchTerm &&
-            searchTerm.toLowerCase().includes(char.toLowerCase())
-          ) {
-            charContent = <span className={style.highlight}>{char}</span>;
-          }
+            let charContent = char;
+            if (
+              !isSelected &&
+              searchTerm &&
+              searchTerm.toLowerCase().includes(char.toLowerCase())
+            ) {
+              charContent = <span className={style.highlight}>{char}</span>;
+            }
 
-          return (
-            <span
-              key={charIndex}
-              className={isSelected ? style['selected-char'] : ''}
-              onMouseDown={() => onCharClick(char, charIndex, address, content)}
-            >
-              {charContent}
-            </span>
-          );
-        })}
+            return (
+              <span
+                key={charIndex}
+                className={isSelected ? style['selected-char'] : ''}
+                onMouseDown={() => onCharClick(charIndex, address, content)}
+              >
+                {charContent}
+              </span>
+            );
+          })
+        ) : (
+          <div onMouseEnter={handleMouseEnter}>
+            {content}
+          </div>
+        )}
       </td>
     </tr>
   );
@@ -104,10 +128,10 @@ function WordsTable({ words, searchTerm, sortByAddress }) {
     }
   });
 
-  const handleCharClick = (char, charIndex, wordAddress, wordContent) => {
+  const handleCharClick = (charIndex, wordAddress, wordContent) => {
     let offset = 0;
     for (let i = 0; i < charIndex; i++) {
-      offset += twoByteChars.includes(wordContent[i]) ? 2 : 1;
+      offset += twoByteChars.includes(Array.from(wordContent)[i]) ? 2 : 1;
     }
 
     const charAddressValue = parseInt(wordAddress, 16) + offset;
