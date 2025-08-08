@@ -39,7 +39,14 @@ function Panel({ searchTerm, setSearchTerm, sortByAddress, setSortByAddress }) {
   );
 }
 
-function TableRow({ address, content, searchTerm, selectedChar, onCharClick }) {
+function TableRow({
+  address,
+  content,
+  searchTerm,
+  selectedChar,
+  setSelectedChar,
+  onCharClick,
+}) {
   const [needSpans, setNeedSpans] = useState(false);
 
   useEffect(() => {
@@ -53,6 +60,7 @@ function TableRow({ address, content, searchTerm, selectedChar, onCharClick }) {
   };
 
   const handleMouseLeave = () => {
+    setSelectedChar(null);
     if (searchTerm === '') {
       setNeedSpans(false);
     }
@@ -99,9 +107,7 @@ function TableRow({ address, content, searchTerm, selectedChar, onCharClick }) {
             );
           })
         ) : (
-          <div onMouseEnter={handleMouseEnter}>
-            {content}
-          </div>
+          <div onMouseEnter={handleMouseEnter}>{content}</div>
         )}
       </td>
     </tr>
@@ -171,6 +177,7 @@ function WordsTable({ words, searchTerm, sortByAddress }) {
                 content={content}
                 searchTerm={searchTerm}
                 selectedChar={selectedChar}
+                setSelectedChar={setSelectedChar}
                 onCharClick={handleCharClick}
               />
             );
