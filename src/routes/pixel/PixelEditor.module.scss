@@ -127,6 +127,9 @@
   border: 1px solid #ccc;
   background-color: #fff;
   cursor: pointer;
+  touch-action: none; /* 防止浏览器默认的触摸行为 */
+  -webkit-tap-highlight-color: transparent; /* 移除iOS上的点击高亮 */
+  user-select: none; /* 防止文本选择 */
 }
 
 .hex-output-container {

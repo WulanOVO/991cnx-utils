@@ -187,6 +187,47 @@ function Canvas({ width, height, pixels, setPixels }) {
     setDrawMode(null);
   };
 
+  const handleTouchStart = (e) => {
+    e.preventDefault(); // 防止滚动和缩放
+    setDrawing(true);
+    const rect = canvasRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+    const x = Math.floor((touch.clientX - rect.left) / pixelSize);
+    const y = Math.floor((touch.clientY - rect.top) / pixelSize);
+
+    // 确定绘制模式：第一个像素的反色
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      const currentValue = pixels[y][x];
+      setDrawMode(currentValue ? 0 : 1);
+      setPixel(x, y, currentValue ? 0 : 1);
+    }
+
+    setLastPos({ x, y });
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault(); // 防止滚动和缩放
+    if (!drawing || drawMode === null) return;
+
+    const rect = canvasRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+    const x = Math.floor((touch.clientX - rect.left) / pixelSize);
+    const y = Math.floor((touch.clientY - rect.top) / pixelSize);
+
+    // 如果位置没变，不做任何事
+    if (lastPos && lastPos.x === x && lastPos.y === y) return;
+
+    setLastPos({ x, y });
+    setPixel(x, y, drawMode);
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault(); // 防止滚动和缩放
+    setDrawing(false);
+    setLastPos(null);
+    setDrawMode(null);
+  };
+
   return (
     <div className={style['canvas-container']}>
       <canvas
@@ -197,6 +238,10 @@ function Canvas({ width, height, pixels, setPixels }) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         className={style.canvas}
       />
     </div>
