@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import style from './RopIDE.module.scss';
 import { Input } from '../../components/PanelInputs';
 
@@ -59,28 +59,14 @@ function HexDisplay({
 export default function RopIDE() {
   const [input, setInput] = useState('');
   const [leftStartAddress, setLeftStartAddress] = useState('E9E0');
-  const [rightStartAddress, setRightStartAddress] = useState('D700');
+  const [rightStartAddress, setRightStartAddress] = useState('D710');
   const [hexDisplay, setHexDisplay] = useState([]);
   const [selectedByte, setSelectedByte] = useState(null);
   const [copyBtnText, setCopyBtnText] = useState('复制');
   const [byteToInputMap, setByteToInputMap] = useState([]);
   const [textareaRef, setTextareaRef] = useState(null);
-
-  // 组件加载时从localStorage读取数据
-  useEffect(() => {
-    try {
-      const savedCode = localStorage.getItem('ropCode');
-      const savedLeftAddr = localStorage.getItem('ropLeftStartAddress');
-      const savedRightAddr = localStorage.getItem('ropRightStartAddress');
-
-      if (savedCode) setInput(savedCode);
-      if (savedLeftAddr) setLeftStartAddress(savedLeftAddr);
-      if (savedRightAddr) setRightStartAddress(savedRightAddr);
-      if (savedCode) setHexDisplay(InputToHex(savedCode));
-    } catch (error) {
-      console.error('读取localStorage失败:', error);
-    }
-  }, []);
+  const [currentFileName, setCurrentFileName] = useState('未命名.rop');
+  const fileInputRef = useRef(null);
 
   const copyHexContent = () => {
     const hexContent = hexDisplay.map((row) => row.join(' ')).join('\n');
@@ -93,6 +79,100 @@ export default function RopIDE() {
     });
   };
 
+  // 创建新文件
+  const createNewFile = () => {
+    if (input && !confirm('是否放弃当前更改并创建新文件？')) {
+      return;
+    }
+    setInput('');
+    setLeftStartAddress('E9E0');
+    setRightStartAddress('D710');
+    setSelectedByte(null);
+    setCurrentFileName('未命名.rop');
+  };
+
+  // 打开文件
+  const openFile = () => {
+    if (input && !confirm('是否放弃当前更改并打开新文件？')) {
+      return;
+    }
+    fileInputRef.current.click();
+  };
+
+  const handleFileNameChange = (e) => {
+    setCurrentFileName(e.target.value);
+  };
+
+  // 处理文件选择
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const fileData = JSON.parse(event.target.result);
+        setInput(fileData.input || '');
+        setLeftStartAddress(fileData.leftStartAddress || 'E9E0');
+        setRightStartAddress(fileData.rightStartAddress || 'D710');
+        setCurrentFileName(file.name);
+      } catch (error) {
+        alert('文件格式错误，无法打开！');
+        console.error('文件解析错误:', error);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = null; // 重置文件输入，允许重新选择同一文件
+  };
+
+  // 保存文件
+  const saveFile = async () => {
+    const fileData = {
+      input,
+      leftStartAddress,
+      rightStartAddress,
+      timestamp: new Date().toISOString(),
+    };
+
+    const jsonString = JSON.stringify(fileData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // 尝试使用现代的File System Access API
+    try {
+      if ('showSaveFilePicker' in window) {
+        const options = {
+          suggestedName: currentFileName,
+          types: [
+            {
+              description: 'ROP文件',
+              accept: { 'application/json': ['.rop'] },
+            },
+          ],
+        };
+
+        const fileHandle = await window.showSaveFilePicker(options);
+        const writable = await fileHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        return; // 成功保存，直接返回
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        return;
+      }
+    }
+
+    // 回退到传统下载方式
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = currentFileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
@@ -102,11 +182,6 @@ export default function RopIDE() {
 
     if (/^[0-9A-F]{0,4}$/.test(value)) {
       setLeftStartAddress(value);
-      try {
-        localStorage.setItem('ropLeftStartAddress', value);
-      } catch (error) {
-        console.error('保存左侧地址到localStorage失败:', error);
-      }
     }
   };
   const handleRightAddressChange = (inputValue) => {
@@ -114,11 +189,6 @@ export default function RopIDE() {
 
     if (/^[0-9A-F]{0,4}$/.test(value)) {
       setRightStartAddress(value);
-      try {
-        localStorage.setItem('ropRightStartAddress', value);
-      } catch (error) {
-        console.error('保存右侧地址到localStorage失败:', error);
-      }
     }
   };
 
@@ -191,12 +261,6 @@ export default function RopIDE() {
     setHexDisplay(rows);
     setByteToInputMap(byteMapping);
     setSelectedByte(null);
-
-    try {
-      localStorage.setItem('ropCode', input);
-    } catch (error) {
-      console.error('保存到localStorage失败:', error);
-    }
   }, [input]);
 
   const handleByteClick = (rowIndex, byteIndex) => {
@@ -357,62 +421,101 @@ export default function RopIDE() {
   };
 
   return (
-    <div className="page-container">
-      <div className={style.editorContainer}>
-        <div className={style.inputPanel}>
-          <textarea
-            ref={(ref) => setTextareaRef(ref)}
-            value={input}
-            onChange={handleInputChange}
-            onSelect={handleTextareaSelect}
-            placeholder="输入ROP代码..."
-            className={style.codeInput}
-          />
-        </div>
+    <>
+      <div className={style.toolbar}>
+        <button
+          className={style.fileButton}
+          onClick={createNewFile}
+          title="创建新文件"
+        >
+          新建
+        </button>
+        <button
+          className={style.fileButton}
+          onClick={openFile}
+          title="打开文件"
+        >
+          打开
+        </button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          accept=".rop"
+          onChange={handleFileSelect}
+        />
+        <button
+          className={style.fileButton}
+          onClick={saveFile}
+          title="保存文件"
+        >
+          保存
+        </button>
+        <input
+          type="text"
+          className={style.currentFileName}
+          value={currentFileName}
+          onChange={handleFileNameChange}
+        />
+      </div>
 
-        <div className={style.hexPanel}>
-          <div className={style.hexDisplaySetting}>
-            <Input
-              label="左侧起始地址:"
-              value={leftStartAddress}
-              onChange={handleLeftAddressChange}
-              placeholder="输入左侧起始地址"
+      <div className="page-container">
+        <div className={style.editorContainer}>
+          <div className={style.inputPanel}>
+            <textarea
+              ref={(ref) => setTextareaRef(ref)}
+              value={input}
+              onChange={handleInputChange}
+              onSelect={handleTextareaSelect}
+              placeholder="输入ROP代码..."
+              className={style.codeInput}
             />
-            <Input
-              label="右侧起始地址:"
-              value={rightStartAddress}
-              onChange={handleRightAddressChange}
-              placeholder="输入右侧起始地址"
-            />
-            <button
-              className={style.copyButton}
-              onClick={copyHexContent}
-              title="复制全部十六进制内容"
-            >
-              {copyBtnText}
-            </button>
           </div>
 
-          <HexDisplay
-            hexDisplay={hexDisplay}
-            leftStartAddress={leftStartAddress}
-            rightStartAddress={rightStartAddress}
-            selectedByte={selectedByte}
-            onByteClick={handleByteClick}
-          />
-          {selectedByte && (
-            <div className={style.selectedAddresses}>
-              选中地址:
-              <span className={style.leftSelectedAddress}>
-                {getSelectedAddresses().left}
-              </span>
-              <span className={style.rightSelectedAddress}>
-                {getSelectedAddresses().right}
-              </span>
+          <div className={style.hexPanel}>
+            <div className={style.hexDisplaySetting}>
+              <Input
+                label="左侧起始地址:"
+                value={leftStartAddress}
+                onChange={handleLeftAddressChange}
+                placeholder="输入左侧起始地址"
+              />
+              <Input
+                label="右侧起始地址:"
+                value={rightStartAddress}
+                onChange={handleRightAddressChange}
+                placeholder="输入右侧起始地址"
+              />
+              <button
+                className={style.copyButton}
+                onClick={copyHexContent}
+                title="复制全部十六进制内容"
+              >
+                {copyBtnText}
+              </button>
             </div>
-          )}
+
+            <HexDisplay
+              hexDisplay={hexDisplay}
+              leftStartAddress={leftStartAddress}
+              rightStartAddress={rightStartAddress}
+              selectedByte={selectedByte}
+              onByteClick={handleByteClick}
+            />
+            {selectedByte && (
+              <div className={style.selectedAddresses}>
+                选中地址:
+                <span className={style.leftSelectedAddress}>
+                  {getSelectedAddresses().left}
+                </span>
+                <span className={style.rightSelectedAddress}>
+                  {getSelectedAddresses().right}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

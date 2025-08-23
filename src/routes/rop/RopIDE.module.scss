@@ -1,8 +1,55 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #ccc;
+
+  .fileButton {
+    padding: 0.25rem 0.75rem;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+
+    &:active {
+      background-color: #d0d0d0;
+    }
+  }
+
+  .currentFileName {
+    margin-left: 0.8rem;
+    font-size: 1rem;
+    color: #666;
+    background-color: transparent;
+    font-style: italic;
+    border: none;
+    border-radius: 4px;
+    width: 12rem;
+
+    &:focus {
+      outline: none;
+      border-bottom: 1px solid #333;
+      background-color: #fff;
+    }
+  }
+}
+
 .editorContainer {
   display: flex;
   gap: 1rem;
-  height: calc(100vh - 150px);
-  min-height: 600px;
+  height: calc(100vh - 190px); // 减去顶部工具栏的高度
+  min-height: 560px;
   justify-content: space-between;
 }
 
@@ -20,7 +67,7 @@
     font-family: 'consolas', monospace;
     font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: 0.25rem;
+    border-radius: 4px;
     resize: none;
 
     &:focus {
@@ -33,12 +80,12 @@
 .hexPanel {
   flex: 1;
   display: flex;
-  flex-direction: column;;
+  flex-direction: column;
   padding: 0.75rem;
   width: fit-content;
   background-color: #f4f4f4;
   border: 1px solid #ccc;
-  border-radius: 0.25rem;
+  border-radius: 4px;
 
   .hexDisplaySetting {
     display: flex;
@@ -52,12 +99,12 @@
     background-color: #1c7ed6;
     color: white;
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
     height: 2rem;
     margin-left: auto;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
 
     &:hover {
       background-color: #1864ab;
@@ -70,7 +117,7 @@
     height: 100%;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 0.25rem;
+    border-radius: 4px;
     padding: 0.75rem;
     font-family: 'consolas', monospace;
     font-size: 0.9rem;
