@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import style from './Tables.module.scss';
 import table00 from '@/data/table-00.json';
 import table00Display from '@/data/table-00-display.json';
+import { Checkbox, Panel, Select } from '@/components/PanelInputs';
 
 const availableTables = [
   { data: table00, name: '字符表' },
@@ -16,35 +17,17 @@ const colorMap = {
   white: { hex: '#fff', explanation: '不可刷字符' },
 };
 
-function Checkbox({ checked, onChange, children }) {
+function TablesPanel({ showColors, setShowColors, showLbf, setShowLbf, availableTables, selectedTable, setSelectedTable }) {
   return (
-    <label className={style['checkbox-label']}>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
+    <Panel>
+      <Select
+        value={selectedTable}
+        onChange={setSelectedTable}
+        options={availableTables.map(table => ({
+          value: table.name,
+          label: table.name
+        }))}
       />
-      {children}
-    </label>
-  );
-}
-
-function Panel({ showColors, setShowColors, showLbf, setShowLbf, availableTables, selectedTable, setSelectedTable }) {
-  return (
-    <div className={style['panel']}>
-      <div className={style['select-container']}>
-        <select
-          value={selectedTable}
-          onChange={(e) => setSelectedTable(e.target.value)}
-          className={style.select}
-        >
-          {availableTables.map(table => (
-            <option key={table.name} value={table.name}>
-              {table.name}
-            </option>
-          ))}
-        </select>
-      </div>
 
       <Checkbox
         checked={showColors}
@@ -56,7 +39,7 @@ function Panel({ showColors, setShowColors, showLbf, setShowLbf, availableTables
       <Checkbox checked={showLbf} onChange={(checked) => setShowLbf(checked)}>
         显示字符转换器步骤
       </Checkbox>
-    </div>
+    </Panel>
   );
 }
 
@@ -136,9 +119,9 @@ export default function Tables() {
   }, [selectedTable]);
 
   return (
-    <div className={style['tables-page-container']}>
+    <div className='page-container'>
       <h1>实用全标注字符表</h1>
-      <Panel
+      <TablesPanel
         showColors={showColors}
         setShowColors={setShowColors}
         showLbf={showLbf}

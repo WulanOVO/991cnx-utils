@@ -18,3 +18,17 @@ a {
   color: inherit;
   text-decoration: none !important;
 }
+
+.page-container {
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+}

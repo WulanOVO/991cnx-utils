@@ -5,6 +5,8 @@ import Home from '@/routes/home/Home.jsx';
 import Tables from '@/routes/tables/Tables.jsx';
 import Words from '@/routes/words/Words.jsx';
 import PixelEditor from '@/routes/pixel/PixelEditor.jsx';
+import RopIDE from '@/routes/rop/RopIDE.jsx';
+
 
 export default function App() {
   return (
@@ -21,6 +23,7 @@ export default function App() {
           <Route path="/tables" element={<Tables />} />
           <Route path="/words" element={<Words />} />
           <Route path="/pixel" element={<PixelEditor />} />
+          <Route path="/rop" element={<RopIDE />} />
         </Routes>
       </div>
 

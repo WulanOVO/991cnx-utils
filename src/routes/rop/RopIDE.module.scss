@@ -1,0 +1,151 @@
+.editorContainer {
+  display: flex;
+  gap: 1rem;
+  height: calc(100vh - 150px);
+  min-height: 600px;
+  justify-content: space-between;
+}
+
+.inputPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 600px;
+  min-width: 300px;
+
+  .codeInput {
+    flex: 1;
+    padding: 0.75rem;
+    font-family: 'consolas', monospace;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    resize: none;
+
+    &:focus {
+      outline: none;
+      border-color: #333;
+    }
+  }
+}
+
+.hexPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;;
+  padding: 0.75rem;
+  width: fit-content;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+
+  .hexDisplaySetting {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 0.5rem 0.5rem;
+    align-items: center;
+  }
+
+  .copyButton {
+    padding: 0.25rem 0.75rem;
+    background-color: #1c7ed6;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    height: 2rem;
+    margin-left: auto;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #1864ab;
+    }
+  }
+
+  .hexDisplay {
+    width: fit-content;
+    margin: 0 auto;
+    height: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    font-family: 'consolas', monospace;
+    font-size: 0.9rem;
+    overflow-y: auto;
+    white-space: nowrap;
+  }
+}
+
+.hexRow {
+  display: flex;
+  margin-bottom: 0.5rem;
+  align-items: center;
+
+  .leftAddress {
+    color: #888;
+    width: 3rem;
+    text-align: left;
+    border-right: 1px solid #ccc;
+  }
+
+  .rightAddress {
+    color: #0066cc;
+    width: 3rem;
+    text-align: right;
+    border-left: 1px solid #ccc;
+  }
+
+  .hexBytes {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+    flex-wrap: nowrap;
+
+    .hexByte {
+      width: 1.5rem;
+      text-align: center;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 2px;
+
+      &.zero {
+        color: #888;
+      }
+
+      &:hover {
+        outline: 2px solid #ccc;
+      }
+
+      &.selected {
+        background-color: #fff100;
+        outline: 2px solid #ffb900;
+      }
+    }
+  }
+}
+
+.selectedAddresses {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.5rem 0;
+  border-top: 1px solid #ccc;
+  color: #333;
+
+  .leftSelectedAddress {
+    font-family: 'consolas', monospace;
+    padding-right: 0.5rem;
+    margin: auto 0;
+    border-right: 2px solid #ccc;
+    color: #888;
+  }
+
+  .rightSelectedAddress {
+    font-family: 'consolas', monospace;
+    margin: auto 0;
+    color: #0066cc;
+  }
+}

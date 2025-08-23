@@ -2,32 +2,16 @@ import { useState, useEffect } from 'react';
 import style from './Words.module.scss';
 import builtInWords from '@/data/built-in-words.json';
 import twoByteChars from '@/data/2-byte-chars.json';
+import { Checkbox, Panel, SearchInput } from '@/components/PanelInputs';
 
-function Checkbox({ checked, onChange, children }) {
+function WordsPanel({ searchTerm, setSearchTerm, sortByAddress, setSortByAddress }) {
   return (
-    <label className={style['checkbox-label']}>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
+    <Panel>
+      <SearchInput
+        value={searchTerm}
+        onChange={setSearchTerm}
+        placeholder="搜索内容..."
       />
-      {children}
-    </label>
-  );
-}
-
-function Panel({ searchTerm, setSearchTerm, sortByAddress, setSortByAddress }) {
-  return (
-    <div className={style['panel']}>
-      <div className={style['search-container']}>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="搜索内容..."
-          className={style.search}
-        />
-      </div>
 
       <Checkbox
         checked={sortByAddress}
@@ -35,7 +19,7 @@ function Panel({ searchTerm, setSearchTerm, sortByAddress, setSortByAddress }) {
       >
         按地址排序
       </Checkbox>
-    </div>
+    </Panel>
   );
 }
 
@@ -194,9 +178,9 @@ export default function Words() {
   const [words, setWords] = useState(builtInWords);
 
   return (
-    <div className={style['words-page-container']}>
+    <div className='page-container'>
       <h1>ROM 内置词语表</h1>
-      <Panel
+      <WordsPanel
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         sortByAddress={sortByAddress}

@@ -1,39 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import style from './PixelEditor.module.scss';
+import { SliderInput, Button, Panel, ButtonsContainer } from '@/components/PanelInputs';
 
-function SliderInput({ label, value, onChange, min, max, step }) {
+function PixelPanel({ width, setWidth, height, setHeight, onClear, onInvert }) {
   return (
-    <div className={style['slider-input-container']}>
-      <label className={style['slider-label']}>{label}: {value}</label>
-      <input
-        type="range"
-        value={value}
-        onChange={(e) => {
-          const newValue = parseInt(e.target.value);
-          if (!isNaN(newValue) && newValue >= min && newValue <= max) {
-            onChange(newValue);
-          }
-        }}
-        min={min}
-        max={max}
-        step={step}
-        className={style['slider-input']}
-      />
-    </div>
-  );
-}
-
-function Button({ onClick, children }) {
-  return (
-    <button className={style.button} onClick={onClick}>
-      {children}
-    </button>
-  );
-}
-
-function Panel({ width, setWidth, height, setHeight, onClear, onInvert }) {
-  return (
-    <div className={style['panel']}>
+    <Panel>
       <SliderInput
         label="画布宽度"
         value={width}
@@ -50,11 +21,11 @@ function Panel({ width, setWidth, height, setHeight, onClear, onInvert }) {
         max={63}
         step={1}
       />
-      <div className={style['buttons-container']}>
+      <ButtonsContainer>
         <Button onClick={onClear}>清空</Button>
         <Button onClick={onInvert}>反色</Button>
-      </div>
-    </div>
+      </ButtonsContainer>
+    </Panel>
   );
 }
 
@@ -298,9 +269,9 @@ export default function PixelEditor() {
   };
 
   return (
-    <div className={style['pixel-editor-container']}>
+    <div className='page-container'>
       <h1>二进制像素编辑器</h1>
-      <Panel
+      <PixelPanel
         width={width}
         setWidth={setWidth}
         height={height}
