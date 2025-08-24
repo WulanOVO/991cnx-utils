@@ -174,25 +174,34 @@
   }
 }
 
-.selectedAddresses {
+.hexFootbar {
   display: flex;
-  gap: 0.5rem;
   margin-top: 0.5rem;
   padding: 0.5rem 0.5rem 0;
   border-top: 1px solid #ccc;
-  color: #333;
 
-  .leftSelectedAddress {
-    font-family: 'consolas', monospace;
-    padding-right: 0.5rem;
-    margin: auto 0;
-    border-right: 2px solid #ccc;
-    color: #888;
+  .selectedAddresses {
+    display: flex;
+    gap: 0.5rem;
+    color: #333;
+
+    .leftSelectedAddress {
+      font-family: 'consolas', monospace;
+      padding-right: 0.5rem;
+      margin: auto 0;
+      border-right: 2px solid #ccc;
+      color: #888;
+    }
+
+    .rightSelectedAddress {
+      font-family: 'consolas', monospace;
+      margin: auto 0;
+      color: #0066cc;
+    }
   }
 
-  .rightSelectedAddress {
-    font-family: 'consolas', monospace;
-    margin: auto 0;
-    color: #0066cc;
+  .bytesTotal {
+    margin-left: auto;
+    color: #333;
   }
 }
