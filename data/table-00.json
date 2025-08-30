@@ -1,0 +1,971 @@
+[
+  [
+    {
+      "text": ""
+    },
+    {
+      "text": "（空格）",
+      "color": "yellow",
+      "lbf": "811",
+      "Arial": true
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "812"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "813"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "814"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "815"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "816"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "817"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "818"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "819"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "81A"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "821"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "822"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "831"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "832"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "833"
+    }
+  ],
+  [
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "834"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "81B"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "81C"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼12"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼11"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "841"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "842"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "843"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "844"
+    },
+    {
+      "text": "▯",
+      "color": "yellow",
+      "lbf": "8▼21"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼22"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼23"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼24"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼41"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼42"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼25"
+    }
+  ],
+  [
+    {
+      "text": "𝒊",
+      "color": "blue",
+      "lbf": "8▼26"
+    },
+    {
+      "text": "𝒆",
+      "color": "green"
+    },
+    {
+      "text": "𝜋",
+      "color": "green"
+    },
+    {
+      "text": ":",
+      "color": "green"
+    },
+    {
+      "text": "$",
+      "color": "yellow",
+      "lbf": "8▼28"
+    },
+    {
+      "text": "?",
+      "color": "yellow",
+      "lbf": "8▲12"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▲11"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼34"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "8▼33"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": ",",
+      "color": "green"
+    },
+    {
+      "text": "",
+      "color": "green"
+    },
+    {
+      "text": ".",
+      "color": "green"
+    },
+    {
+      "text": "@"
+    }
+  ],
+  [
+    {
+      "text": "0",
+      "color": "green"
+    },
+    {
+      "text": "1",
+      "color": "green"
+    },
+    {
+      "text": "2",
+      "color": "green"
+    },
+    {
+      "text": "3",
+      "color": "green"
+    },
+    {
+      "text": "4",
+      "color": "green"
+    },
+    {
+      "text": "5",
+      "color": "green"
+    },
+    {
+      "text": "6",
+      "color": "green"
+    },
+    {
+      "text": "7",
+      "color": "green"
+    },
+    {
+      "text": "8",
+      "color": "green"
+    },
+    {
+      "text": "9",
+      "color": "green"
+    },
+    {
+      "text": "𝗔",
+      "color": "yellow",
+      "lbf": "737"
+    },
+    {
+      "text": "𝗕",
+      "color": "yellow",
+      "lbf": "738"
+    },
+    {
+      "text": "𝗖",
+      "color": "yellow",
+      "lbf": "739"
+    },
+    {
+      "text": "𝗗",
+      "color": "yellow",
+      "lbf": "73A"
+    },
+    {
+      "text": "𝗘",
+      "color": "yellow",
+      "lbf": "73B"
+    },
+    {
+      "text": "𝗙",
+      "color": "yellow",
+      "lbf": "73C"
+    }
+  ],
+  [
+    {
+      "text": "M",
+      "color": "green"
+    },
+    {
+      "text": "Ans",
+      "color": "green"
+    },
+    {
+      "text": "A",
+      "color": "green"
+    },
+    {
+      "text": "B",
+      "color": "green"
+    },
+    {
+      "text": "C",
+      "color": "green"
+    },
+    {
+      "text": "D",
+      "color": "green"
+    },
+    {
+      "text": "E",
+      "color": "green"
+    },
+    {
+      "text": "F",
+      "color": "green"
+    },
+    {
+      "text": "𝒙",
+      "color": "green"
+    },
+    {
+      "text": "𝒚",
+      "color": "green"
+    },
+    {
+      "text": "PreAns",
+      "color": "yellow",
+      "lbf": "746"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "713"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "747"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "748"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "749"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "714"
+    }
+  ],
+  [
+    {
+      "text": "∑(",
+      "color": "violet",
+      "lbf": "715"
+    },
+    {
+      "text": "∫(",
+      "color": "violet",
+      "lbf": "724"
+    },
+    {
+      "text": "d/d𝒙(",
+      "color": "violet",
+      "lbf": "7▼11"
+    },
+    {
+      "text": "∏(",
+      "color": "yellow",
+      "lbf": "725"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "716"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "7▼21"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "717"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "7▼12"
+    },
+    {
+      "text": "Min(",
+      "color": "yellow",
+      "lbf": "718"
+    },
+    {
+      "text": "Max(",
+      "color": "yellow",
+      "lbf": "719"
+    },
+    {
+      "text": "Mean(",
+      "color": "yellow",
+      "lbf": "726"
+    },
+    {
+      "text": "Sum(",
+      "color": "yellow",
+      "lbf": "727"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "73X"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "7▼13"
+    },
+    {
+      "text": "@",
+      "color": "yellow",
+      "lbf": "7▼14"
+    },
+    {
+      "text": "@"
+    }
+  ],
+  [
+    {
+      "text": "(",
+      "color": "green"
+    },
+    {
+      "text": "P("
+    },
+    {
+      "text": "Q("
+    },
+    {
+      "text": "R("
+    },
+    {
+      "text": "Not("
+    },
+    {
+      "text": "Neg("
+    },
+    {
+      "text": "Conjg(",
+      "color": "blue"
+    },
+    {
+      "text": "Arg(",
+      "color": "blue"
+    },
+    {
+      "text": "Abs(",
+      "color": "green"
+    },
+    {
+      "text": "Rnd(",
+      "color": "green"
+    },
+    {
+      "text": "Det("
+    },
+    {
+      "text": "Trn("
+    },
+    {
+      "text": "sinh(",
+      "color": "green"
+    },
+    {
+      "text": "cosh(",
+      "color": "green"
+    },
+    {
+      "text": "tanh(",
+      "color": "green"
+    },
+    {
+      "text": "sinh(",
+      "color": "green"
+    }
+  ],
+  [
+    {
+      "text": "cosh(",
+      "color": "green"
+    },
+    {
+      "text": "tanh(",
+      "color": "green"
+    },
+    {
+      "text": "𝒆^(",
+      "color": "green"
+    },
+    {
+      "text": "^(",
+      "color": "green"
+    },
+    {
+      "text": "√(",
+      "color": "green"
+    },
+    {
+      "text": "ln(",
+      "color": "green"
+    },
+    {
+      "text": "³√(",
+      "color": "green"
+    },
+    {
+      "text": "sin(",
+      "color": "green"
+    },
+    {
+      "text": "cos(",
+      "color": "green"
+    },
+    {
+      "text": "tan(",
+      "color": "green"
+    },
+    {
+      "text": "sin(",
+      "color": "green"
+    },
+    {
+      "text": "cos(",
+      "color": "green"
+    },
+    {
+      "text": "tan(",
+      "color": "green"
+    },
+    {
+      "text": "log(",
+      "color": "green"
+    },
+    {
+      "text": "Pol(",
+      "color": "violet"
+    },
+    {
+      "text": "Rec(",
+      "color": "violet"
+    }
+  ],
+  [
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "Int("
+    },
+    {
+      "text": "Intg("
+    },
+    {
+      "text": "Ref("
+    },
+    {
+      "text": "Rref("
+    },
+    {
+      "text": "RanInt#(",
+      "color": "green"
+    },
+    {
+      "text": "GCD("
+    },
+    {
+      "text": "LCM("
+    },
+    {
+      "text": "RndFix("
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "ReP(",
+      "color": "blue"
+    }
+  ],
+  [
+    {
+      "text": "ImP(",
+      "color": "blue"
+    },
+    {
+      "text": "Identity("
+    },
+    {
+      "text": "UnitV("
+    },
+    {
+      "text": "Angle("
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    }
+  ],
+  [
+    {
+      "text": "or"
+    },
+    {
+      "text": "xor"
+    },
+    {
+      "text": "xnor"
+    },
+    {
+      "text": "and"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "=",
+      "color": "green"
+    },
+    {
+      "text": "+",
+      "color": "green"
+    },
+    {
+      "text": "-",
+      "color": "green"
+    },
+    {
+      "text": "×",
+      "color": "green"
+    },
+    {
+      "text": "÷",
+      "color": "green"
+    },
+    {
+      "text": "÷R",
+      "color": "violet"
+    },
+    {
+      "text": "⋅"
+    },
+    {
+      "text": "∠",
+      "color": "blue"
+    },
+    {
+      "text": "𝗣",
+      "color": "green"
+    },
+    {
+      "text": "𝗖",
+      "color": "green"
+    },
+    {
+      "text": "@"
+    }
+  ],
+  [
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": ""
+    },
+    {
+      "text": "₁"
+    },
+    {
+      "text": "₂"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    }
+  ],
+  [
+    {
+      "text": "−",
+      "color": "green"
+    },
+    {
+      "text": "b"
+    },
+    {
+      "text": "o"
+    },
+    {
+      "text": "d"
+    },
+    {
+      "text": "h"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "⌟",
+      "color": "green"
+    },
+    {
+      "text": "^(",
+      "color": "green"
+    },
+    {
+      "text": "√(",
+      "color": "green"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    }
+  ],
+  [
+    {
+      "text": ")",
+      "color": "green"
+    },
+    {
+      "text": "▸t"
+    },
+    {
+      "text": "▸a+b𝒊",
+      "color": "blue"
+    },
+    {
+      "text": "▸r∠𝜃",
+      "color": "blue"
+    },
+    {
+      "text": "",
+      "color": "green"
+    },
+    {
+      "text": "²",
+      "color": "green"
+    },
+    {
+      "text": "³",
+      "color": "green"
+    },
+    {
+      "text": "%",
+      "color": "violet"
+    },
+    {
+      "text": "!",
+      "color": "green"
+    },
+    {
+      "text": "°",
+      "color": "green"
+    },
+    {
+      "text": "ʳ",
+      "color": "green"
+    },
+    {
+      "text": "ᵍ",
+      "color": "green"
+    },
+    {
+      "text": "▫",
+      "color": "green"
+    },
+    {
+      "text": "𝐄",
+      "color": "green"
+    },
+    {
+      "text": "𝐏",
+      "color": "green"
+    },
+    {
+      "text": "𝐓",
+      "color": "green"
+    }
+  ],
+  [
+    {
+      "text": "𝐆",
+      "color": "green"
+    },
+    {
+      "text": "𝐌",
+      "color": "green"
+    },
+    {
+      "text": "𝐤",
+      "color": "green"
+    },
+    {
+      "text": "𝐦",
+      "color": "green"
+    },
+    {
+      "text": "𝝁",
+      "color": "green"
+    },
+    {
+      "text": "𝐧",
+      "color": "green"
+    },
+    {
+      "text": "𝐩",
+      "color": "green"
+    },
+    {
+      "text": "𝐟",
+      "color": "green"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "▸Simp"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    },
+    {
+      "text": "@"
+    }
+  ]
+]
