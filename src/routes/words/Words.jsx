@@ -1,27 +1,6 @@
 import { useState, useEffect } from 'react';
 import style from './Words.module.scss';
-import builtInWords from '@/data/built-in-words.json';
-import twoByteChars from '@/data/2-byte-chars.json';
 import { Checkbox, Panel, SearchInput } from '@/components/PanelInputs';
-
-function WordsPanel({ searchTerm, setSearchTerm, sortByAddress, setSortByAddress }) {
-  return (
-    <Panel>
-      <SearchInput
-        value={searchTerm}
-        onChange={setSearchTerm}
-        placeholder="搜索内容..."
-      />
-
-      <Checkbox
-        checked={sortByAddress}
-        onChange={(checked) => setSortByAddress(checked)}
-      >
-        按地址排序
-      </Checkbox>
-    </Panel>
-  );
-}
 
 function TableRow({
   address,
@@ -98,7 +77,7 @@ function TableRow({
   );
 }
 
-function WordsTable({ words, searchTerm, sortByAddress }) {
+function WordsTable({ words, searchTerm, sortByAddress, twoByteChars }) {
   const [selectedChar, setSelectedChar] = useState(null);
   const filteredWords = words.filter((word) => {
     const content = word[1];
@@ -172,24 +151,56 @@ function WordsTable({ words, searchTerm, sortByAddress }) {
   );
 }
 
+const fetchWords = async () => {
+  const response = await fetch('/991cnx-utils/data/built-in-words.json');
+  const data = await response.json();
+  return data;
+};
+
+const fetchTwoByteChars = async () => {
+  const response = await fetch('/991cnx-utils/data/2-byte-chars.json');
+  const data = await response.json();
+  return data;
+};
+
 export default function Words() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortByAddress, setSortByAddress] = useState(false);
-  const [words, setWords] = useState(builtInWords);
+  const [words, setWords] = useState([]);
+  const [twoByteChars, setTwoByteChars] = useState([]);
+
+  useEffect(() => {
+    fetchWords().then(setWords);
+    fetchTwoByteChars().then(setTwoByteChars);
+  }, []);
+
+  if (!words) {
+    return null;
+  }
 
   return (
     <div className='page-container'>
       <h1>ROM 内置词语表</h1>
-      <WordsPanel
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        sortByAddress={sortByAddress}
-        setSortByAddress={setSortByAddress}
-      />
+      <Panel>
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="搜索内容..."
+        />
+
+        <Checkbox
+          checked={sortByAddress}
+          onChange={(checked) => setSortByAddress(checked)}
+        >
+          按地址排序
+        </Checkbox>
+      </Panel>
+
       <WordsTable
         words={words}
         searchTerm={searchTerm}
         sortByAddress={sortByAddress}
+        twoByteChars={twoByteChars}
       />
     </div>
   );

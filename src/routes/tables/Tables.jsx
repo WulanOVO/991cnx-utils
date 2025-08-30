@@ -1,13 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import style from './Tables.module.scss';
-import table00 from '@/data/table-00.json';
-import table00Display from '@/data/table-00-display.json';
 import { Checkbox, Panel, Select } from '@/components/PanelInputs';
 
-const availableTables = [
-  { data: table00, name: '字符表' },
-  { data: table00Display, name: '拼字字符表' },
-];
+const fetchTables = async () => {
+  const availableTables = [];
+
+  const fetchTableData = async (file, name) => {
+    const response = await fetch(`/991cnx-utils/data/${file}`);
+    const data = await response.json();
+    availableTables.push({ name, data });
+  };
+
+  await Promise.all([
+    fetchTableData('table-00.json', '字符表'),
+    fetchTableData('table-00-display.json', '拼字字符表'),
+  ]);
+
+  return availableTables;
+}
 
 const colorMap = {
   green: { hex: '#d3f9d8', explanation: '可直接打出' },
@@ -108,8 +118,18 @@ function ColorLegend() {
 export default function Tables() {
   const [showColors, setShowColors] = useState(true);
   const [showLbf, setShowLbf] = useState(true);
-  const [selectedTable, setSelectedTable] = useState(availableTables[0].name);
-  const [tableData, setTableData] = useState(availableTables[0].data);
+  const [availableTables, setAvailableTables] = useState([]);
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [tableData, setTableData] = useState(null);
+
+  useEffect(() => {
+    fetchTables().then(setAvailableTables);
+  }, []);
+
+  useEffect(() => {
+    setSelectedTable(availableTables[0]?.name || null);
+    setTableData(availableTables[0]?.data || null);
+  }, [availableTables]);
 
   useEffect(() => {
     const table = availableTables.find(table => table.name === selectedTable);
@@ -117,6 +137,10 @@ export default function Tables() {
       setTableData(table.data);
     }
   }, [selectedTable]);
+
+  if (!tableData) {
+    return null;
+  }
 
   return (
     <div className='page-container'>

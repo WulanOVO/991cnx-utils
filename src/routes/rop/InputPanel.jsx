@@ -91,18 +91,45 @@ export default function InputPanel({
     [byteToInputMap]
   );
 
-  // 处理输入框选择事件
+  // 处理输入框选择事件和光标移动事件
   const handleTextareaSelect = useCallback(
     (e) => {
       const start = e.target.selectionStart;
       const end = e.target.selectionEnd;
 
       if (start === end) {
-        onSelectionInputChange(null);
+        // 光标移动到某个位置（没有选择文本）
+        const found = findByte(start, start + 1);
+        onSelectionInputChange(found);
         return;
       }
 
+      // 选择了文本
       const found = findByte(start, end);
+      onSelectionInputChange(found);
+    },
+    [findByte, onSelectionInputChange]
+  );
+
+  // 处理键盘事件，确保方向键移动也能触发高亮
+  const handleKeyUp = useCallback(
+    (e) => {
+      // 只处理方向键、Home、End等导航键
+      const navKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'];
+      if (navKeys.includes(e.key)) {
+        const pos = e.target.selectionStart;
+        const found = findByte(pos, pos + 1);
+        onSelectionInputChange(found);
+      }
+    },
+    [findByte, onSelectionInputChange]
+  );
+
+  // 处理鼠标点击事件
+  const handleClick = useCallback(
+    (e) => {
+      const pos = e.target.selectionStart;
+      const found = findByte(pos, pos + 1);
       onSelectionInputChange(found);
     },
     [findByte, onSelectionInputChange]
@@ -127,6 +154,8 @@ export default function InputPanel({
         value={input}
         onChange={onInputChange}
         onSelect={handleTextareaSelect}
+        onClick={handleClick}
+        onKeyUp={handleKeyUp}
         placeholder="输入ROP代码..."
         className={style.codeInput}
       />
