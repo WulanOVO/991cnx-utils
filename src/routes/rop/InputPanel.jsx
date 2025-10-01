@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import style from './RopIDE.module.scss';
 
 export default function InputPanel({
@@ -9,14 +9,102 @@ export default function InputPanel({
   selectedInput,
 }) {
   const [textareaRef, setTextareaRef] = useState(null);
+  const highlightedContentRef = useRef(null);
+  const editorRef = useRef(null);
+  const [cursorPosition, setCursorPosition] = useState({ start: 0, end: 0 });
+
+  // 解析代码，识别注释
+  const parseCode = useCallback((code) => {
+    if (!code) return [];
+
+    const lines = code.split('\n');
+    const parsedLines = [];
+    const hexRegex = /^[0-9a-fA-F]$/;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const segments = [];
+      let currentSegment = { text: '', type: 'code' };
+
+      // 查找注释的起始位置
+      const commentIndex = line.indexOf('//');
+
+      // 如果有//注释，先处理注释前的部分
+      let processEndIndex = commentIndex !== -1 ? commentIndex : line.length;
+
+      // 处理每个字符，识别非十六进制字符
+      for (let j = 0; j < processEndIndex; j++) {
+        const char = line[j];
+
+        // 检查是否为十六进制字符
+        if (hexRegex.test(char)) {
+          // 如果当前段是注释，需要创建新的代码段
+          if (currentSegment.type === 'comment') {
+            if (currentSegment.text) {
+              segments.push({ ...currentSegment });
+            }
+            currentSegment = { text: char, type: 'code' };
+          } else {
+            // 继续添加到当前代码段
+            currentSegment.text += char;
+          }
+        } else {
+          // 非十六进制字符视为注释
+          // 如果当前段是代码，需要创建新的注释段
+          if (currentSegment.type === 'code') {
+            if (currentSegment.text) {
+              segments.push({ ...currentSegment });
+            }
+            currentSegment = { text: char, type: 'comment' };
+          } else {
+            // 继续添加到当前注释段
+            currentSegment.text += char;
+          }
+        }
+      }
+
+      // 添加最后一个处理的段
+      if (currentSegment.text) {
+        segments.push({ ...currentSegment });
+      }
+
+      // 处理//注释
+      if (commentIndex !== -1) {
+        segments.push({
+          text: line.substring(commentIndex),
+          type: 'comment',
+        });
+      }
+
+      parsedLines.push(segments);
+    }
+
+    return parsedLines;
+  }, []);
+
+  // 生成高亮HTML
+  const generateHighlightedHTML = useCallback((parsedLines) => {
+    return parsedLines
+      .map((line, lineIndex) => {
+        const lineContent = line
+          .map((segment, segmentIndex) => {
+            const className = segment.type === 'comment' ? style.comment : '';
+            return `<span class="${className}" data-line="${lineIndex}" data-segment="${segmentIndex}">${segment.text}</span>`;
+          })
+          .join('');
+
+        return `<div class="${style.codeLine}">${lineContent || ' '}</div>`;
+      })
+      .join('');
+  }, []);
 
   // 滚动输入框到选中位置
   const scrollTextareaToSelection = useCallback(
     (position) => {
-      if (!textareaRef) return;
+      if (!editorRef.current) return;
 
       // 获取当前行的位置
-      const text = textareaRef.value;
+      const text = input;
       const lines = text.substr(0, position).split('\n');
       const lineIndex = lines.length - 1;
 
@@ -25,16 +113,19 @@ export default function InputPanel({
 
       // 计算滚动位置，使选中行在视图中间
       const scrollPosition =
-        lineIndex * lineHeight - textareaRef.clientHeight / 2 + lineHeight;
+        lineIndex * lineHeight -
+        editorRef.current.clientHeight / 2 +
+        lineHeight;
 
       // 确保滚动位置在有效范围内
-      const maxScroll = textareaRef.scrollHeight - textareaRef.clientHeight;
+      const maxScroll =
+        editorRef.current.scrollHeight - editorRef.current.clientHeight;
       const targetScroll = Math.max(0, Math.min(scrollPosition, maxScroll));
 
       // 平滑滚动到目标位置
-      textareaRef.scrollTop = targetScroll;
+      editorRef.current.scrollTop = targetScroll;
     },
-    [textareaRef]
+    [input]
   );
 
   const findByte = useCallback(
@@ -97,6 +188,8 @@ export default function InputPanel({
       const start = e.target.selectionStart;
       const end = e.target.selectionEnd;
 
+      setCursorPosition({ start, end });
+
       if (start === end) {
         // 光标移动到某个位置（没有选择文本）
         const found = findByte(start, start + 1);
@@ -115,11 +208,21 @@ export default function InputPanel({
   const handleKeyUp = useCallback(
     (e) => {
       // 只处理方向键、Home、End等导航键
-      const navKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'];
+      const navKeys = [
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown',
+        'Home',
+        'End',
+        'PageUp',
+        'PageDown',
+      ];
       if (navKeys.includes(e.key)) {
         const pos = e.target.selectionStart;
         const found = findByte(pos, pos + 1);
         onSelectionInputChange(found);
+        setCursorPosition({ start: pos, end: pos });
       }
     },
     [findByte, onSelectionInputChange]
@@ -131,9 +234,29 @@ export default function InputPanel({
       const pos = e.target.selectionStart;
       const found = findByte(pos, pos + 1);
       onSelectionInputChange(found);
+      setCursorPosition({ start: pos, end: pos });
     },
     [findByte, onSelectionInputChange]
   );
+
+  // 同步滚动处理
+  const handleScroll = useCallback(
+    (e) => {
+      if (highlightedContentRef.current && textareaRef) {
+        highlightedContentRef.current.scrollTop = e.target.scrollTop;
+      }
+    },
+    [textareaRef]
+  );
+
+  // 当输入内容变化时，更新高亮显示
+  useEffect(() => {
+    if (highlightedContentRef.current) {
+      const parsedCode = parseCode(input);
+      const html = generateHighlightedHTML(parsedCode);
+      highlightedContentRef.current.innerHTML = html;
+    }
+  }, [input, parseCode, generateHighlightedHTML]);
 
   // 当十六进制字节被选中时，高亮输入框中对应的内容
   useEffect(() => {
@@ -142,23 +265,38 @@ export default function InputPanel({
     const { start, end } = selectedInput;
     textareaRef.focus();
     textareaRef.setSelectionRange(start, end);
+    setCursorPosition({ start, end });
 
     // 滚动输入框到选中位置
     scrollTextareaToSelection(start);
   }, [selectedInput, textareaRef, scrollTextareaToSelection]);
 
   return (
-    <div className={style.inputPanel}>
-      <textarea
-        ref={setTextareaRef}
-        value={input}
-        onChange={onInputChange}
-        onSelect={handleTextareaSelect}
-        onClick={handleClick}
-        onKeyUp={handleKeyUp}
-        placeholder="输入ROP代码..."
-        className={style.codeInput}
-      />
+    <div className={style.inputPanel} ref={editorRef}>
+      <div className={style.codeEditorContainer}>
+        <div
+          className={style.highlightedContent}
+          ref={highlightedContentRef}
+        ></div>
+        <textarea
+          ref={setTextareaRef}
+          value={input}
+          onChange={(e) => {
+            onInputChange(e);
+            setCursorPosition({
+              start: e.target.selectionStart,
+              end: e.target.selectionEnd,
+            });
+          }}
+          onSelect={handleTextareaSelect}
+          onClick={handleClick}
+          onKeyUp={handleKeyUp}
+          onScroll={handleScroll}
+          placeholder="输入ROP代码..."
+          className={style.codeInput}
+          spellCheck="false"
+        />
+      </div>
     </div>
   );
 }

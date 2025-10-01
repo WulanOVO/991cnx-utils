@@ -1,8 +1,7 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import style from './RopIDE.module.scss';
 import InputPanel from './InputPanel';
 import HexPanel from './HexPanel';
-
 
 const IDE_VERSION = 10;
 
@@ -89,7 +88,7 @@ export default function RopIDE() {
         await writable.close();
 
         setIsDirty(false);
-        return; // 成功保存，直接返回
+        return;
       }
     } catch (err) {
       if (err.name === 'AbortError') {
@@ -119,21 +118,57 @@ export default function RopIDE() {
     setSelectedByte(newSelectedByte);
   }, []);
 
-  const handleSelectionByteChange = useCallback((newSelectedByte, newSelectedInput) => {
-    setSelectedByte(newSelectedByte);
-    setSelectedInput(newSelectedInput);
-  }, []);
+  const handleSelectionByteChange = useCallback(
+    (newSelectedByte, newSelectedInput) => {
+      setSelectedByte(newSelectedByte);
+      setSelectedInput(newSelectedInput);
+    },
+    []
+  );
 
-  const handleHexDisplayChange = useCallback((newHexDisplay, newByteToInputMap) => {
-    setHexDisplay(newHexDisplay);
-    setByteToInputMap(newByteToInputMap);
-  }, []);
+  const handleHexDisplayChange = useCallback(
+    (newHexDisplay, newByteToInputMap) => {
+      setHexDisplay(newHexDisplay);
+      setByteToInputMap(newByteToInputMap);
+    },
+    []
+  );
 
-  window.onbeforeunload = () => {
-    if (isDirty) {
-      return '您确定要离开吗？所有未保存的更改都将丢失。';
+  useEffect(() => {
+    if (currentFileName) {
+      document.title = `RopIDE - ${currentFileName}`;
     }
-  };
+  }, [currentFileName]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveFile();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [saveFile]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.returnValue = '您确定要离开吗？所有未保存的更改都将丢失。';
+        return e.returnValue;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isDirty]);
 
   return (
     <>
@@ -182,6 +217,7 @@ export default function RopIDE() {
             onSelectionInputChange={handleSelectionInputChange}
             byteToInputMap={byteToInputMap}
             selectedInput={selectedInput}
+            onSave={saveFile}
           />
 
           <HexPanel
