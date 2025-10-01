@@ -7,6 +7,7 @@ export default function InputPanel({
   onSelectionInputChange,
   byteToInputMap,
   selectedInput,
+  onClearSelection,
 }) {
   const [textareaRef, setTextareaRef] = useState(null);
   const highlightedContentRef = useRef(null);
@@ -19,61 +20,26 @@ export default function InputPanel({
 
     const lines = code.split('\n');
     const parsedLines = [];
-    const hexRegex = /^[0-9a-fA-F]$/;
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const segments = [];
-      let currentSegment = { text: '', type: 'code' };
 
-      // 查找注释的起始位置
-      const commentIndex = line.indexOf('//');
+      // 拆分“//xxx”
+      const [, beforeComment, comment = ''] = line.match(/^([^\/]*)(\/\/.*)?$/) || [, line];
 
-      // 如果有//注释，先处理注释前的部分
-      let processEndIndex = commentIndex !== -1 ? commentIndex : line.length;
+      // 切分代码与非代码部分
+      const hexParts = beforeComment.split(/([0-9a-fA-F ]+)/);
 
-      // 处理每个字符，识别非十六进制字符
-      for (let j = 0; j < processEndIndex; j++) {
-        const char = line[j];
+      hexParts.forEach((part) => {
+        if (!part) return;
+        const type = /^[0-9a-fA-F ]+$/.test(part) ? 'code' : 'comment';
+        segments.push({ text: part, type });
+      });
 
-        // 检查是否为十六进制字符
-        if (hexRegex.test(char)) {
-          // 如果当前段是注释，需要创建新的代码段
-          if (currentSegment.type === 'comment') {
-            if (currentSegment.text) {
-              segments.push({ ...currentSegment });
-            }
-            currentSegment = { text: char, type: 'code' };
-          } else {
-            // 继续添加到当前代码段
-            currentSegment.text += char;
-          }
-        } else {
-          // 非十六进制字符视为注释
-          // 如果当前段是代码，需要创建新的注释段
-          if (currentSegment.type === 'code') {
-            if (currentSegment.text) {
-              segments.push({ ...currentSegment });
-            }
-            currentSegment = { text: char, type: 'comment' };
-          } else {
-            // 继续添加到当前注释段
-            currentSegment.text += char;
-          }
-        }
-      }
-
-      // 添加最后一个处理的段
-      if (currentSegment.text) {
-        segments.push({ ...currentSegment });
-      }
-
-      // 处理//注释
-      if (commentIndex !== -1) {
-        segments.push({
-          text: line.substring(commentIndex),
-          type: 'comment',
-        });
+      // 把整段“//xxx”追加为注释
+      if (comment) {
+        segments.push({ text: comment, type: 'comment' });
       }
 
       parsedLines.push(segments);
@@ -207,6 +173,11 @@ export default function InputPanel({
   // 处理键盘事件，确保方向键移动也能触发高亮
   const handleKeyUp = useCallback(
     (e) => {
+      // 在处理键盘事件时清除高亮
+      if (onClearSelection) {
+        onClearSelection();
+      }
+
       // 只处理方向键、Home、End等导航键
       const navKeys = [
         'ArrowLeft',
@@ -225,18 +196,23 @@ export default function InputPanel({
         setCursorPosition({ start: pos, end: pos });
       }
     },
-    [findByte, onSelectionInputChange]
+    [findByte, onSelectionInputChange, onClearSelection]
   );
 
   // 处理鼠标点击事件
   const handleClick = useCallback(
     (e) => {
+      // 在处理鼠标点击事件时清除高亮
+      if (onClearSelection) {
+        onClearSelection();
+      }
+
       const pos = e.target.selectionStart;
       const found = findByte(pos, pos + 1);
       onSelectionInputChange(found);
       setCursorPosition({ start: pos, end: pos });
     },
-    [findByte, onSelectionInputChange]
+    [findByte, onSelectionInputChange, onClearSelection]
   );
 
   // 同步滚动处理

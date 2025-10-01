@@ -246,9 +246,9 @@ export default function HexPanel({
 
   const countBytes = useCallback(() => {
     let count = 0;
-    for(let i = hexDisplay.length - 1; i >= 0; i--) {
-      for(let j = hexDisplay[i].length - 1; j >= 0; j--) {
-        if(hexDisplay[i][j] !== '00' || count > 0) {
+    for (let i = hexDisplay.length - 1; i >= 0; i--) {
+      for (let j = hexDisplay[i].length - 1; j >= 0; j--) {
+        if (hexDisplay[i][j] !== '00' || count > 0) {
           count++;
         }
       }
@@ -300,9 +300,7 @@ export default function HexPanel({
           </div>
         )}
 
-        <div className={style.bytesTotal}>
-          字节总数: {countBytes()}
-        </div>
+        <div className={style.bytesTotal}>字节总数: {countBytes()}</div>
       </div>
     </div>
   );

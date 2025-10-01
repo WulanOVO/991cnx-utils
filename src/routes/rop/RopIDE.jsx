@@ -22,6 +22,7 @@ export default function RopIDE() {
       return;
     }
     setInput('');
+    setSelectedInput(null);
     setSelectedByte(null);
     setCurrentFileName('未命名.rop');
   };
@@ -126,6 +127,11 @@ export default function RopIDE() {
     []
   );
 
+  const handleClearSelection = useCallback(() => {
+    setSelectedByte(null);
+    setSelectedInput(null);
+  }, []);
+
   const handleHexDisplayChange = useCallback(
     (newHexDisplay, newByteToInputMap) => {
       setHexDisplay(newHexDisplay);
@@ -134,12 +140,14 @@ export default function RopIDE() {
     []
   );
 
+  // 根据当前文件名更新标题
   useEffect(() => {
     if (currentFileName) {
       document.title = `RopIDE - ${currentFileName}`;
     }
   }, [currentFileName]);
 
+  // 监听Ctrl+S或Cmd+S保存文件
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -217,6 +225,7 @@ export default function RopIDE() {
             onSelectionInputChange={handleSelectionInputChange}
             byteToInputMap={byteToInputMap}
             selectedInput={selectedInput}
+            onClearSelection={handleClearSelection} // 传递清除函数
             onSave={saveFile}
           />
 
