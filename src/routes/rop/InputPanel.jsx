@@ -14,6 +14,13 @@ export default function InputPanel({
   const highlightedContentRef = useRef(null);
   const editorRef = useRef(null);
   const [cursorPosition, setCursorPosition] = useState({ start: 0, end: 0 });
+  const [suggestions, setSuggestions] = useState([]);
+  const [autocompleteVisible, setAutocompleteVisible] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
+  const [autocompletePosition, setAutocompletePosition] = useState({
+    top: 0,
+    left: 0,
+  });
 
   // 生成高亮HTML
   const generateHighlightedHTML = useCallback((code) => {
@@ -218,7 +225,6 @@ export default function InputPanel({
     [findByte, onSelectionInputChange, onClearSelection]
   );
 
-  // 处理鼠标点击事件
   const handleClick = useCallback(
     (e) => {
       onClearSelection();
@@ -231,7 +237,6 @@ export default function InputPanel({
     [findByte, onSelectionInputChange, onClearSelection]
   );
 
-  // 同步滚动处理
   const handleScroll = useCallback(
     (e) => {
       if (highlightedContentRef.current && textareaRef) {
@@ -262,6 +267,123 @@ export default function InputPanel({
     scrollTextareaToSelection(start);
   }, [selectedInput, textareaRef, scrollTextareaToSelection]);
 
+  const handleAutocomplete = (text) => {
+    const cursorPos = textareaRef.selectionStart;
+    const textBeforeCursor = text.substring(0, cursorPos);
+    const match = textBeforeCursor.match(/#([a-zA-Z0-9-]*)$/);
+
+    if (match) {
+      const query = match[1];
+
+      let filteredSuggestions = Object.entries(gadgets)
+        .map(([name, data]) => ({ name, ...data }))
+        .filter((g) => g.name.toLowerCase().includes(query.toLowerCase()));
+
+      if (query.startsWith('-')) {
+        filteredSuggestions.forEach((g) => (g.name = `-${g.name}`));
+      }
+
+      setSuggestions(filteredSuggestions);
+      setAutocompleteVisible(filteredSuggestions.length > 0);
+      setSelectedSuggestionIndex(0);
+
+      const { top, left } = getCursorPosition(textareaRef, cursorPos);
+      setAutocompletePosition({ top, left });
+    } else {
+      setAutocompleteVisible(false);
+    }
+  };
+
+  const getCursorPosition = (textarea, cursorPos) => {
+    if (!textarea) return { top: 0, left: 0 };
+
+    // 创建一个临时的div来模拟textarea
+    const div = document.createElement('div');
+    const style = window.getComputedStyle(textarea);
+    [
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'fontStyle',
+      'letterSpacing',
+      'lineHeight',
+      'padding',
+      'whiteSpace',
+      'wordWrap',
+      'wordBreak',
+    ].forEach((prop) => {
+      div.style[prop] = style[prop];
+    });
+    div.style.position = 'absolute';
+    div.style.visibility = 'hidden';
+    div.style.width = style.width;
+
+    const text = textarea.value.substring(0, cursorPos);
+    div.textContent = text;
+
+    // 创建一个span来标记光标位置
+    const span = document.createElement('span');
+    span.textContent = '|'; // 使用一个字符来模拟光标
+    div.appendChild(span);
+
+    document.body.appendChild(div);
+
+    const top = span.offsetTop + span.offsetHeight;
+    const left = span.offsetLeft;
+
+    document.body.removeChild(div);
+
+    return { top, left };
+  };
+
+  const handleSuggestionSelect = (suggestion) => {
+    const cursorPos = textareaRef.selectionStart;
+    const textBeforeCursor = input.substring(0, cursorPos);
+    const match = textBeforeCursor.match(/#([a-zA-Z0-9-]*)$/);
+
+    if (match) {
+      const startIndex = match.index;
+      const newText =
+        input.substring(0, startIndex) +
+        `#${suggestion.name};` +
+        input.substring(cursorPos);
+
+      onInputChange(newText);
+      setAutocompleteVisible(false);
+
+      setTimeout(() => {
+        const newCursorPos = startIndex + suggestion.name.length + 2;
+        textareaRef.setSelectionRange(newCursorPos, newCursorPos);
+      }, 0);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (autocompleteVisible) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prevIndex) =>
+          Math.min(prevIndex + 1, suggestions.length - 1)
+        );
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+      } else if (e.key === 'Enter' || e.key === 'Tab') {
+        e.preventDefault();
+        if (suggestions[selectedSuggestionIndex]) {
+          handleSuggestionSelect(suggestions[selectedSuggestionIndex]);
+        }
+      } else if (e.key === 'Escape') {
+        setAutocompleteVisible(false);
+      }
+    }
+  };
+
+  const placeholder = `输入ROP代码...
+
+使用 #xxx; 格式插入gadget
+#-xxx; 将避免产生00`;
+
   return (
     <div className={style.inputPanel} ref={editorRef}>
       <div className={style.codeEditorContainer}>
@@ -273,7 +395,8 @@ export default function InputPanel({
           ref={setTextareaRef}
           value={input}
           onChange={(e) => {
-            onInputChange(e);
+            onInputChange(e.target.value);
+            handleAutocomplete(e.target.value);
             setCursorPosition({
               start: e.target.selectionStart,
               end: e.target.selectionEnd,
@@ -282,12 +405,71 @@ export default function InputPanel({
           onSelect={handleTextareaSelect}
           onClick={handleClick}
           onKeyUp={handleKeyUp}
+          onKeyDown={handleKeyDown}
           onScroll={handleScroll}
-          placeholder="输入ROP代码..."
+          placeholder={placeholder}
           className={style.codeInput}
           spellCheck="false"
         />
+        {autocompleteVisible && (
+          <AutocompletePanel
+            suggestions={suggestions}
+            onSelect={handleSuggestionSelect}
+            selectedIndex={selectedSuggestionIndex}
+            style={autocompletePosition}
+          />
+        )}
       </div>
+    </div>
+  );
+}
+
+function AutocompletePanel({
+  suggestions,
+  onSelect,
+  selectedIndex,
+  style: positionStyle,
+}) {
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    if (panelRef.current && selectedIndex !== null) {
+      const selectedItem = panelRef.current.children[selectedIndex];
+      if (selectedItem) {
+        selectedItem.scrollIntoView({ block: 'center' });
+      }
+    }
+  }, [selectedIndex]);
+
+  if (!suggestions.length) {
+    return null;
+  }
+
+  return (
+    <div
+      className={style.autocompletePanel}
+      style={positionStyle}
+      ref={panelRef}
+    >
+      {suggestions.map((suggestion, index) => (
+        <div
+          key={suggestion.name}
+          className={`${style.suggestionItem} ${
+            index === selectedIndex ? style.selected : ''
+          }`}
+          onClick={() => onSelect(suggestion)}
+        >
+          <span className={style.name}>{suggestion.name}</span>
+          <span className={style.addr}>{suggestion.addr}</span>
+          {suggestion.rt && <span className={style.rtTag}>RT</span>}
+          {suggestion.pops.map((pop) => (
+            <span key={pop} className={style.popTag}>
+              {pop}
+            </span>
+          ))}
+          <span className={style.desc}>{suggestion.desc?.split('\n')[0]}</span>
+        </div>
+      ))}
     </div>
   );
 }

@@ -110,8 +110,8 @@ export default function RopIDE() {
     setIsDirty(false);
   };
 
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
+  const handleInputChange = (value) => {
+    setInput(value);
     setIsDirty(true);
   };
 

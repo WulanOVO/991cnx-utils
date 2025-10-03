@@ -31,7 +31,7 @@
   },
   "mem-add": {
     "addr": "08F24",
-    "desc": "内存地址加法（[ER8] += ER2）\nER8：内存地址\nER2：偏移量",
+    "desc": "内存地址加法 [ER8] += ER2\nER8：内存地址\nER2：偏移量",
     "rt": false,
     "pops": ["XR8"]
   },
