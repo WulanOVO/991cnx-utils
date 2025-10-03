@@ -75,10 +75,8 @@
 
     .highlightedContent {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      width: 100%;
+      height: 100%;
       padding: 0.75rem;
       font-family: 'consolas', monospace;
       font-size: 1rem;
@@ -92,17 +90,27 @@
         font-style: italic;
       }
 
-      .anchor {
+      .gadget {
         color: #0066cc;
+        border-radius: 2px;
+        background-color: #eff6fc;
         text-decoration: underline;
+
+        &.unclosed {
+          background-color: transparent;
+          text-decoration: none;
+        }
+
+        &.undefined {
+          color: #d83b01;
+          background-color: #ffe3e3;
+        }
       }
     }
   }
 
   .codeInput {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     padding: 0.75rem;
@@ -117,6 +125,10 @@
 
     &:focus {
       outline: none;
+    }
+
+    &::selection {
+      background-color: rgba(0, 0, 0, 0.15);
     }
   }
 }
@@ -168,84 +180,84 @@
     overflow-y: auto;
     white-space: nowrap;
   }
-}
 
-.hexRow {
-  display: flex;
-  margin-bottom: 0.5rem;
-  align-items: center;
-
-  .leftAddress {
-    color: #888;
-    width: 3rem;
-    text-align: left;
-    border-right: 1px solid #ccc;
-  }
-
-  .rightAddress {
-    color: #0066cc;
-    width: 3rem;
-    text-align: right;
-    border-left: 1px solid #ccc;
-  }
-
-  .hexBytes {
+  .hexRow {
     display: flex;
-    gap: 0.25rem;
-    padding: 0 0.5rem;
-    flex-wrap: nowrap;
+    margin-bottom: 0.5rem;
+    align-items: center;
 
-    .hexByte {
-      width: 1.5rem;
-      text-align: center;
-      display: inline-block;
-      cursor: pointer;
-      border-radius: 2px;
+    .leftAddress {
+      color: #888;
+      width: 3rem;
+      text-align: left;
+      border-right: 1px solid #ccc;
+    }
 
-      &.zero {
+    .rightAddress {
+      color: #0066cc;
+      width: 3rem;
+      text-align: right;
+      border-left: 1px solid #ccc;
+    }
+
+    .hexBytes {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0 0.5rem;
+      flex-wrap: nowrap;
+
+      .hexByte {
+        width: 1.5rem;
+        text-align: center;
+        display: inline-block;
+        cursor: pointer;
+        border-radius: 2px;
+
+        &.zero {
+          color: #888;
+        }
+
+        &:hover {
+          outline: 2px solid #ccc;
+        }
+
+        &.selected {
+          background-color: #fff100;
+          outline: 2px solid #ffb900;
+        }
+      }
+    }
+  }
+
+  .hexFootbar {
+    display: flex;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.5rem 0;
+    border-top: 1px solid #ccc;
+
+    .selectedAddresses {
+      display: flex;
+      gap: 0.5rem;
+      color: #333;
+
+      .leftSelectedAddress {
+        font-family: 'consolas', monospace;
+        padding-right: 0.5rem;
+        margin: auto 0;
+        border-right: 2px solid #ccc;
         color: #888;
       }
 
-      &:hover {
-        outline: 2px solid #ccc;
-      }
-
-      &.selected {
-        background-color: #fff100;
-        outline: 2px solid #ffb900;
+      .rightSelectedAddress {
+        font-family: 'consolas', monospace;
+        margin: auto 0;
+        color: #0066cc;
       }
     }
-  }
-}
 
-.hexFootbar {
-  display: flex;
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.5rem 0;
-  border-top: 1px solid #ccc;
-
-  .selectedAddresses {
-    display: flex;
-    gap: 0.5rem;
-    color: #333;
-
-    .leftSelectedAddress {
-      font-family: 'consolas', monospace;
-      padding-right: 0.5rem;
-      margin: auto 0;
-      border-right: 2px solid #ccc;
-      color: #888;
+    .bytesTotal {
+      margin-left: auto;
+      color: #333;
     }
-
-    .rightSelectedAddress {
-      font-family: 'consolas', monospace;
-      margin: auto 0;
-      color: #0066cc;
-    }
-  }
-
-  .bytesTotal {
-    margin-left: auto;
-    color: #333;
   }
 }

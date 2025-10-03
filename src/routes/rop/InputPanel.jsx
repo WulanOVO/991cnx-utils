@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import style from './RopIDE.module.scss';
+import gadgets from './gadgets.json';
 
 export default function InputPanel({
   input,
@@ -14,54 +15,75 @@ export default function InputPanel({
   const editorRef = useRef(null);
   const [cursorPosition, setCursorPosition] = useState({ start: 0, end: 0 });
 
-  // 解析代码，识别注释
-  const parseCode = useCallback((code) => {
+  // 生成高亮HTML
+  const generateHighlightedHTML = useCallback((code) => {
     if (!code) return [];
 
     const lines = code.split('\n');
-    const parsedLines = [];
+    const htmlLines = [];
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const segments = [];
+    const newSegment = (text, type) =>
+      `<span class="${type.map((t) => style[t]).join(' ')}">${text}</span>`;
 
-      // 拆分“//xxx”
-      const [, beforeComment, comment = ''] = line.match(/^([^\/]*)(\/\/.*)?$/) || [, line];
+    lines.forEach((line, lineIndex) => {
+      const htmlLine = [];
 
-      // 切分代码与非代码部分
-      const hexParts = beforeComment.split(/([0-9a-fA-F ]+)/);
+      if (!line) htmlLines.push(' ');
 
-      hexParts.forEach((part) => {
+      // 拆分行尾的注释 (//...)
+      const [, beforeComment, comment = ''] = line.match(
+        /^([^\/]*)(\/\/.*)?$/
+      ) || [, line];
+
+      // 拆分行尾未闭合的gadget (#...)
+      const [, beforeUnclosedGadget, unclosedGadget = ''] = beforeComment.match(
+        /^([^#]*)(#[^;]*)$/
+      ) || [, beforeComment];
+
+      // 拆分已闭合的gadget (#...;)
+      const gadgetParts = beforeUnclosedGadget.split(/(#[^;]*;)/);
+
+      gadgetParts.forEach((part) => {
         if (!part) return;
-        const type = /^[0-9a-fA-F ]+$/.test(part) ? 'code' : 'comment';
-        segments.push({ text: part, type });
+
+        // 如果是 gadget 片段
+        if (/^#[^;]*;$/.test(part)) {
+          if (
+            gadgets[part.slice(1, -1)] ||
+            (part.slice(1, 2) === '-' && gadgets[part.slice(2, -1)])
+          ) {
+            htmlLine.push(newSegment(part, ['gadget']));
+          } else {
+            htmlLine.push(newSegment(part, ['gadget', 'undefined']));
+          }
+          return;
+        }
+
+        // 剩下的再按十六进制/空白切分
+        const hexParts = part.split(/([0-9a-fA-F ]+)/);
+        hexParts.forEach((sub) => {
+          if (!sub) return;
+          const type = /^[0-9a-fA-F ]+$/.test(sub) ? ['code'] : ['comment'];
+          htmlLine.push(newSegment(sub, type));
+        });
       });
 
       // 把整段“//xxx”追加为注释
       if (comment) {
-        segments.push({ text: comment, type: 'comment' });
+        htmlLine.push(newSegment(comment, ['comment']));
       }
 
-      parsedLines.push(segments);
-    }
+      // 把正在写的未闭合的gadget 片段追加为 unclosedGadget
+      if (unclosedGadget) {
+        htmlLine.push(newSegment(unclosedGadget, ['gadget', 'unclosed']));
+      }
 
-    return parsedLines;
-  }, []);
+      htmlLines.push(
+        `<div data-line-index="${lineIndex}">${htmlLine.join('')}</div>`
+      );
+    });
 
-  // 生成高亮HTML
-  const generateHighlightedHTML = useCallback((parsedLines) => {
-    return parsedLines
-      .map((line, lineIndex) => {
-        const lineContent = line
-          .map((segment, segmentIndex) => {
-            const className = segment.type === 'comment' ? style.comment : '';
-            return `<span class="${className}" data-line="${lineIndex}" data-segment="${segmentIndex}">${segment.text}</span>`;
-          })
-          .join('');
-
-        return `<div class="${style.codeLine}">${lineContent || ' '}</div>`;
-      })
-      .join('');
+    return htmlLines.join('');
   }, []);
 
   // 滚动输入框到选中位置
@@ -173,10 +195,7 @@ export default function InputPanel({
   // 处理键盘事件，确保方向键移动也能触发高亮
   const handleKeyUp = useCallback(
     (e) => {
-      // 在处理键盘事件时清除高亮
-      if (onClearSelection) {
-        onClearSelection();
-      }
+      onClearSelection();
 
       // 只处理方向键、Home、End等导航键
       const navKeys = [
@@ -202,10 +221,7 @@ export default function InputPanel({
   // 处理鼠标点击事件
   const handleClick = useCallback(
     (e) => {
-      // 在处理鼠标点击事件时清除高亮
-      if (onClearSelection) {
-        onClearSelection();
-      }
+      onClearSelection();
 
       const pos = e.target.selectionStart;
       const found = findByte(pos, pos + 1);
@@ -228,11 +244,10 @@ export default function InputPanel({
   // 当输入内容变化时，更新高亮显示
   useEffect(() => {
     if (highlightedContentRef.current) {
-      const parsedCode = parseCode(input);
-      const html = generateHighlightedHTML(parsedCode);
+      const html = generateHighlightedHTML(input);
       highlightedContentRef.current.innerHTML = html;
     }
-  }, [input, parseCode, generateHighlightedHTML]);
+  }, [input, generateHighlightedHTML]);
 
   // 当十六进制字节被选中时，高亮输入框中对应的内容
   useEffect(() => {

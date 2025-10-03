@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import style from './RopIDE.module.scss';
 import { Input } from '../../components/PanelInputs';
+import gadgets from './gadgets.json';
 
 function HexDisplay({
   hexDisplay,
@@ -97,6 +98,7 @@ export default function HexPanel({
     });
   }, [hexDisplay]);
 
+  // 寻找字节对应的输入区部分
   const findInputRange = useCallback(
     (bytePos) => {
       if (!bytePos) return { start: 0, end: 0 };
@@ -175,61 +177,145 @@ export default function HexPanel({
     };
   }, [selectedByte, leftStartAddress, rightStartAddress]);
 
-  useEffect(() => {
-    // 创建映射数组，记录每个十六进制字节在原始输入中的位置
-    const mapping = [];
+  const getGadgetHex = useCallback((gadgetName, gadgets, allow00 = true) => {
+    const addr = gadgets[gadgetName]?.addr || '';
+    if (!addr) return '';
+
+    let hex = '';
+    hex += addr.slice(3, 5);
+    if (hex === '00' && !allow00) hex = '01';
+    hex += addr.slice(1, 3);
+    hex += `${allow00 ? '0' : '3'}${addr[0]}`;
+    hex += allow00 ? '00' : '30';
+
+    return hex.toUpperCase();
+  }, []);
+
+  // 解析ROP代码输入，将其转换为十六进制字符流，并生成原始位置的映射
+  const parseInputToHex = (input, gadgets) => {
+    const mapping = []; // 存储每个十六进制字符在原始输入中的位置
+    let hexChars = ''; // 存储最终拼接的十六进制字符串
+    let currentPositionInInput = 0; // 跟踪处理到输入字符串的哪个位置
+
     const lines = input.split('\n');
-    let hexChars = '';
-    let currentPosition = 0;
 
-    // 处理每一行，构建映射关系
+    // 逐行解析输入
     lines.forEach((line, lineIndex) => {
-      const lineStartPos = currentPosition;
-      // 移除注释部分
-      const noCommentLine = line.split('//')[0];
-      // 提取0-F字符的位置
-      let hexInLine = '';
+      const lineStartPosInInput = currentPositionInInput;
+      let currentPosInLine = 0;
 
-      for (let i = 0; i < noCommentLine.length; i++) {
-        const char = noCommentLine[i];
-        if (/[0-9A-Fa-f]/.test(char)) {
-          hexInLine += char.toUpperCase();
-          // 记录这个十六进制字符在原始输入中的位置
-          mapping.push({
-            inputIndex: lineStartPos + i,
-            lineIndex: lineIndex,
-            charIndex: i,
-          });
+      // 忽略行尾的注释 (//...)
+      const [, beforeComment] = line.match(/^([^/]*)(\/\/.*)?$/) || [, line];
+
+      // 忽略行尾未闭合的gadget (#...)
+      const [, beforeUnclosedGadget] = beforeComment.match(
+        /^([^#]*)(#[^;]*)$/
+      ) || [, beforeComment];
+
+      // 根据已闭合的gadget (#...;) 分割代码
+      const parts = beforeUnclosedGadget.split(/(#[^;]*;)/);
+
+      parts.forEach((part) => {
+        if (!part) return;
+
+        // 计算当前部分在行内的起始索引，用于后续精确定位
+        const partStartIndexInLine = beforeUnclosedGadget.indexOf(
+          part,
+          currentPosInLine
+        );
+        currentPosInLine = partStartIndexInLine + part.length;
+        const partStartPosInInput = lineStartPosInInput + partStartIndexInLine;
+
+        // 处理已闭合的gadget
+        if (/^#[^;]*;$/.test(part)) {
+          let gadgetName = part.slice(1, -1);
+          if (!gadgetName) return;
+
+          const allow00 = !gadgetName.startsWith('-');
+          if (!allow00) {
+            gadgetName = gadgetName.slice(1);
+          }
+          const hexValue = getGadgetHex(gadgetName, gadgets, allow00);
+
+          if (hexValue) {
+            hexChars += hexValue.toUpperCase();
+            // 为gadget对应的每个十六进制字符创建映射
+            // 注意：这里将整个gadget的多个hex字符都映射到gadget文本的起始位置
+            for (let k = 0; k < hexValue.length; k++) {
+              mapping.push({
+                inputIndex: partStartPosInInput,
+                lineIndex: lineIndex,
+                charIndex: partStartIndexInLine,
+              });
+            }
+          }
+          // 如果在gadgets.json中未找到定义，则忽略该gadget
+        } else {
+          // 处理普通代码（非gadget部分），提取十六进制字符
+          for (let i = 0; i < part.length; i++) {
+            const char = part[i];
+            if (/[0-9A-Fa-f]/.test(char)) {
+              hexChars += char.toUpperCase();
+              // 为每个有效的十六进制字符创建精确的映射
+              mapping.push({
+                inputIndex: partStartPosInInput + i,
+                lineIndex: lineIndex,
+                charIndex: partStartIndexInLine + i,
+              });
+            }
+          }
         }
-      }
+      });
 
-      hexChars += hexInLine;
-      currentPosition += line.length + 1; // +1 是为了换行符
+      // 更新位置，准备处理下一行 (+1 是为了换行符)
+      currentPositionInInput += line.length + 1;
     });
 
-    if (hexChars.length === 0) {
-      hexChars = '00';
-      mapping.push({ inputIndex: 0, lineIndex: 0, charIndex: 0 });
-      mapping.push({ inputIndex: 0, lineIndex: 0, charIndex: 0 });
-    }
+    return { hexChars, mapping };
+  };
 
-    // 将字符串分成16字节一组（每字节2个字符）
-    const rows = [];
-    const byteMapping = [];
+  // 当输入区变化时，更新Hex显示和字节映射
+  useEffect(() => {
+    // 从输入代码生成十六进制字符流和映射
+    const { hexChars: rawHexChars, mapping: rawMapping } = parseInputToHex(
+      input,
+      gadgets
+    );
+
+    // 如果解析后没有任何十六进制内容，则提供一个默认的 "00" 字节用于显示
+    const hexChars = rawHexChars.length > 0 ? rawHexChars : '00';
+    const mapping =
+      rawMapping.length > 0
+        ? rawMapping
+        : [
+            { inputIndex: 0, lineIndex: 0, charIndex: 0 },
+            { inputIndex: 0, lineIndex: 0, charIndex: 0 },
+          ];
+
+    // 将连续的十六进制字符流格式化为16字节宽的行
+    const rows = []; // 存储最终在界面上显示的十六进制行
+    const byteMapping = []; // 存储每个字节到原始输入位置的映射
 
     for (let i = 0; i < hexChars.length; i += 32) {
-      const chunk = hexChars.slice(i, i + 32).padEnd(32, '0');
+      // 32个字符 = 16字节
+      const chunk = hexChars.slice(i, i + 32).padEnd(32, '0'); // 不足一行则用'0'补齐
       const bytes = [];
       const byteMappingRow = [];
 
       for (let j = 0; j < chunk.length; j += 2) {
+        // 每2个字符为一个字节
         const byte = chunk.substring(j, j + 2);
         bytes.push(byte);
 
-        // 记录这个字节对应的原始输入位置
-        const firstCharPos = i + j < mapping.length ? mapping[i + j] : null;
+        // 为每个字节创建映射关系
+        // 一个字节由两个十六进制字符组成，记录这两个字符在原始输入中的位置
+        const firstCharIndex = i + j;
+        const secondCharIndex = i + j + 1;
+
+        const firstCharPos =
+          firstCharIndex < mapping.length ? mapping[firstCharIndex] : null;
         const secondCharPos =
-          i + j + 1 < mapping.length ? mapping[i + j + 1] : null;
+          secondCharIndex < mapping.length ? mapping[secondCharIndex] : null;
 
         byteMappingRow.push({
           firstChar: firstCharPos,
@@ -242,7 +328,7 @@ export default function HexPanel({
     }
 
     onHexDisplayChange(rows, byteMapping);
-  }, [input]);
+  }, [input, onHexDisplayChange]);
 
   const countBytes = useCallback(() => {
     let count = 0;

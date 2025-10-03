@@ -115,6 +115,11 @@ export default function RopIDE() {
     setIsDirty(true);
   };
 
+  const handleClearSelection = useCallback(() => {
+    setSelectedByte(null);
+    setSelectedInput(null);
+  }, []);
+
   const handleSelectionInputChange = useCallback((newSelectedByte) => {
     setSelectedByte(newSelectedByte);
   }, []);
@@ -126,11 +131,6 @@ export default function RopIDE() {
     },
     []
   );
-
-  const handleClearSelection = useCallback(() => {
-    setSelectedByte(null);
-    setSelectedInput(null);
-  }, []);
 
   const handleHexDisplayChange = useCallback(
     (newHexDisplay, newByteToInputMap) => {
@@ -225,8 +225,7 @@ export default function RopIDE() {
             onSelectionInputChange={handleSelectionInputChange}
             byteToInputMap={byteToInputMap}
             selectedInput={selectedInput}
-            onClearSelection={handleClearSelection} // 传递清除函数
-            onSave={saveFile}
+            onClearSelection={handleClearSelection}
           />
 
           <HexPanel
