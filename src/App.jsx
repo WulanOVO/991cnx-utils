@@ -6,15 +6,22 @@ import Home from '@/routes/home/Home.jsx';
 import Tables from '@/routes/tables/Tables.jsx';
 import Words from '@/routes/words/Words.jsx';
 import PixelEditor from '@/routes/pixel/PixelEditor.jsx';
-import RopIDE from '@/routes/rop/RopIDE.jsx';
 
+const RopIDE = () => {
+  // RopIDE 已经迁移到外部页面，这里保留入口跳转
+  window.location.href = '/../rop-ide/';
+};
 
 export default function App() {
   const [showHeader, setShowHeader] = useState(true);
 
   return (
     <div className={style['app-container']}>
-      <div className={`${style['app-header']} ${showHeader ? '' : style['hidden']}`}>
+      <div
+        className={`${style['app-header']} ${
+          showHeader ? '' : style['hidden']
+        }`}
+      >
         <div className={style['header-content']}>
           <Link to="/" className={style['logo']}>
             <h1>fx-991CN X 工具集</h1>
@@ -45,11 +52,18 @@ export default function App() {
           <Route path="/tables" element={<Tables />} />
           <Route path="/words" element={<Words />} />
           <Route path="/pixel" element={<PixelEditor />} />
-          <Route path="/rop" element={<RopIDE />} />
+          <Route
+            path="/rop"
+            element={<RopIDE />}
+          />
         </Routes>
       </div>
 
-      <footer className={`${style['app-footer']} ${showHeader ? '' : style['hidden']}`}>
+      <footer
+        className={`${style['app-footer']} ${
+          showHeader ? '' : style['hidden']
+        }`}
+      >
         <div className={style['footer-content']}>
           <div>
             <p>
